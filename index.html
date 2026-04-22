@@ -413,32 +413,26 @@
 
     .hero-platform-tag {
       position:absolute;
-      bottom:80px;
+      bottom:72px;
       left:50%;
       transform:translateX(-50%);
       white-space:nowrap;
-      font-size:22px;
-      font-weight:800;
-      color:#111;
-      letter-spacing:-.03em;
-      z-index:15;
-      background:rgba(253,246,240,.72);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      padding:12px 28px;
-      border-radius:50px;
-      border:1.5px solid rgba(255,107,44,.18);
+      font-size:26px;
+      font-weight:900;
+      color:rgba(17,17,17,0.10);
+      letter-spacing:-.02em;
+      z-index:2;
       pointer-events:none;
+      user-select:none;
     }
     .hero-platform-tag em {
       font-style:normal;
-      color:var(--orange);
+      color:rgba(255,107,44,0.16);
     }
     @media (max-width:768px) {
       .hero-platform-tag {
-        font-size:16px;
-        padding:10px 20px;
-        bottom:72px;
+        font-size:18px;
+        bottom:64px;
         white-space:normal;
         text-align:center;
         width:calc(100% - 48px);
