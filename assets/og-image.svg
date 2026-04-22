@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFF8F4"/>
+      <stop offset="100%" stop-color="#FDF0E8"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FF6B2C"/>
+      <stop offset="100%" stop-color="#FF8C55"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Orange accent blob -->
+  <ellipse cx="980" cy="120" rx="320" ry="280" fill="#FF6B2C" opacity="0.08"/>
+  <ellipse cx="120" cy="520" rx="200" ry="180" fill="#FF6B2C" opacity="0.06"/>
+
+  <!-- Left bar -->
+  <rect x="72" y="72" width="6" height="486" rx="3" fill="url(#accent)"/>
+
+  <!-- Brand -->
+  <text x="108" y="130" font-family="Arial Black, sans-serif" font-size="28" font-weight="900" fill="#FF6B2C" letter-spacing="2">CONTENTSMINING</text>
+  <text x="108" y="162" font-family="Arial, sans-serif" font-size="15" fill="#888" letter-spacing="1">패션 브랜드 콘텐츠 마케팅 전문</text>
+
+  <!-- Main headline -->
+  <text x="108" y="260" font-family="Arial Black, sans-serif" font-size="58" font-weight="900" fill="#111">500억 원을 직접</text>
+  <text x="108" y="330" font-family="Arial Black, sans-serif" font-size="58" font-weight="900" fill="#111">팔아보며 찾았습니다.</text>
+
+  <!-- Sub -->
+  <text x="108" y="396" font-family="Arial, sans-serif" font-size="26" fill="#444">신생 패션 브랜드, 마케팅 3주 만에</text>
+  <text x="108" y="432" font-family="Arial, sans-serif" font-size="26" fill="#FF6B2C" font-weight="700">주간 매출 8,000만 원 달성</text>
+
+  <!-- Stats row -->
+  <rect x="108" y="488" width="220" height="80" rx="14" fill="#FF6B2C"/>
+  <text x="218" y="522" font-family="Arial Black, sans-serif" font-size="22" font-weight="900" fill="#fff" text-anchor="middle">ROAS 538%</text>
+  <text x="218" y="548" font-family="Arial, sans-serif" font-size="13" fill="rgba(255,255,255,0.85)" text-anchor="middle">구매 전환 광고 성과</text>
+
+  <rect x="348" y="488" width="220" height="80" rx="14" fill="#fff" stroke="#eee" stroke-width="1.5"/>
+  <text x="458" y="522" font-family="Arial Black, sans-serif" font-size="22" font-weight="900" fill="#111" text-anchor="middle">1억 1천만 원</text>
+  <text x="458" y="548" font-family="Arial, sans-serif" font-size="13" fill="#888" text-anchor="middle">구매 전환값</text>
+
+  <rect x="588" y="488" width="220" height="80" rx="14" fill="#fff" stroke="#eee" stroke-width="1.5"/>
+  <text x="698" y="522" font-family="Arial Black, sans-serif" font-size="22" font-weight="900" fill="#111" text-anchor="middle">180만 회</text>
+  <text x="698" y="548" font-family="Arial, sans-serif" font-size="13" fill="#888" text-anchor="middle">누적 콘텐츠 조회수</text>
+
+  <!-- URL -->
+  <text x="1128" y="590" font-family="Arial, sans-serif" font-size="18" fill="#bbb" text-anchor="end">contentsmining.com</text>
+</svg>
