@@ -413,13 +413,13 @@
 
     .hero-platform-tag {
       position:absolute;
-      bottom:72px;
+      bottom:110px;
       left:50%;
       transform:translateX(-50%);
       white-space:nowrap;
       font-size:26px;
       font-weight:900;
-      color:rgba(17,17,17,0.10);
+      color:rgba(17,17,17,0.22);
       letter-spacing:-.02em;
       z-index:2;
       pointer-events:none;
@@ -427,12 +427,12 @@
     }
     .hero-platform-tag em {
       font-style:normal;
-      color:rgba(255,107,44,0.16);
+      color:rgba(255,107,44,0.35);
     }
     @media (max-width:768px) {
       .hero-platform-tag {
         font-size:18px;
-        bottom:64px;
+        bottom:90px;
         white-space:normal;
         text-align:center;
         width:calc(100% - 48px);
@@ -652,8 +652,13 @@
       background:#F8F8F8;
     }
     .results .container {
-      display:grid; grid-template-columns:1fr 280px; gap:48px; align-items:start;
+      display:block;
     }
+    .res-chart-row {
+      display:flex; gap:24px; align-items:start; margin-top:0;
+    }
+    .res-chart-row .line-wrap { flex:1; min-width:0; }
+    .res-chart-row .stats-col { width:240px; flex-shrink:0; }
     .res-title {
       font-size:clamp(24px, 3vw, 36px); font-weight:900; line-height:1.3;
       letter-spacing:-.025em; margin-bottom:16px;
@@ -845,8 +850,8 @@
       .hero, .credibility, .problem, .solution, .results, .cta-section { padding-left:30px; padding-right:30px; }
       .credibility .container { grid-template-columns:1fr; gap:48px; }
       .problem .container { grid-template-columns:1fr; gap:48px; }
-      .results .container { grid-template-columns:1fr; gap:32px; }
-      .stats-col { flex-direction:row; flex-wrap:wrap; }
+      .res-chart-row { flex-direction:column; }
+      .res-chart-row .stats-col { width:100%; flex-direction:row; flex-wrap:wrap; }
       .stat-card { flex:1; min-width:180px; }
       .hero-stats { gap:0; padding:16px 20px; }
       .hero-stat { padding:0 18px; }
@@ -958,15 +963,15 @@
 
     <div class="hero-stats">
       <div class="hero-stat">
-        <div class="hero-stat-val jump-text">500억+</div>
+        <div class="hero-stat-val">500억+</div>
         <div class="hero-stat-lbl">패션 판매 누적 실적</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-val">ROAS <em>5.68</em></div>
+        <div class="hero-stat-val">ROAS <em>538%</em></div>
         <div class="hero-stat-lbl">광고 수익률 달성</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-val jump-text">8,000만</div>
+        <div class="hero-stat-val">8,000만</div>
         <div class="hero-stat-lbl">3주 만에 주간 매출</div>
       </div>
     </div>
@@ -997,9 +1002,9 @@
       <p class="cred-desc">
         무신사 입점과 에이블리 광고에 수백만 원을 태우고도<br>
         ROAS 200%에 허덕이고 있다면,<br>
-        이 글을 3번만 읽어주세요.
+        지금부터 3분만 집중해 주세요.
       </p>
-      <p class="cred-highlight">→ 3번만 읽어주세요.</p>
+      <p class="cred-highlight">→ 지금부터 3분만 집중해 주세요.</p>
     </div>
     <div class="chart-card">
       <div class="chart-watermark">500</div>
@@ -1017,8 +1022,10 @@
   <div class="container">
     <div class="prob-text">
       <h2 class="prob-title">
-        수 만개 리뷰의 '고인물' 브랜드 사이에서<br class="br-pc">
-        우리 옷이 팔릴 확률은 <em class="jump-text">0%</em>에 가깝습니다.
+        수 만개 리뷰의<br>
+        '고인물' 브랜드 사이에서<br>
+        우리 옷이 팔릴 확률은<br>
+        <em>0%</em>에 가깝습니다.
       </h2>
       <div class="prob-body">
         <p>솔직히 말씀드리겠습니다.<br>대형 플랫폼은 이미 리뷰가 권력이 된 시장입니다.</p>
@@ -1169,7 +1176,7 @@
     </h2>
     <p class="sol-sub">상세페이지에 수백만 원 쓰지 마세요. 고객은 상세페이지를 보기도 전에 광고에서 나갑니다.</p>
     <p class="sol-body">
-      우리는 데이터에서 소비자가 가장 반응하는 <strong>'결핍'</strong>을 찾아냅니다.<br class="br-pc">
+      우리는 데이터에서 소비자가 가장 반응하는 '결핍'을 찾아냅니다.<br class="br-pc">
       단순히 예쁜 룩북이 아닌<br class="br-pc"> '체형 콤플렉스를 해결하는 15초 영상',
       '이 옷을 입고 갈 장소가 상상되는 서사'를 제공합니다.
     </p>
@@ -1326,15 +1333,14 @@
       <p class="res-body">
         상상이 아닙니다.<br class="br-pc"> 자사몰 중심의 콘텐츠 마케팅으로 플랫폼 수수료를 아끼고<br class="br-pc">
         그 비용을 다시 <strong>'전환되는 콘텐츠'</strong>에 투자한 결과입니다.<br class="br-pc">
-        배00 브랜드: 누적 조회 180만 회 &nbsp;|&nbsp; 전000 브랜드: 누적 조회 100만 회.
-        <a href="#inquiry">콘텐츠마이닝의 공식 로직</a>은 이미 잘 작동하고 있습니다.
+        배OO 브랜드: 누적 조회 180만 회<br>
+        전OO 브랜드: 누적 조회 100만 회
       </p>
-      <div class="line-wrap">
-        <canvas id="lineChart"></canvas>
-      </div>
-    </div>
-
-    <div class="stats-col">
+      <div class="res-chart-row">
+        <div class="line-wrap">
+          <canvas id="lineChart"></canvas>
+        </div>
+        <div class="stats-col">
       <div class="stat-card">
         <div class="stat-icon">
           <!-- 구매 전환: 쇼핑백 -->
@@ -1365,6 +1371,8 @@
           <div class="stat-lbl">객단가 (01/16~01/29)</div>
         </div>
       </div>
+        </div><!-- /.stats-col -->
+      </div><!-- /.res-chart-row -->
     </div>
   </div>
 </section>
@@ -1697,7 +1705,7 @@
     img.onerror = showFallback;
     var t = setTimeout(showFallback, 2200);
     img.onload = function() { clearTimeout(t); };
-    img.src = 'https://www.google.com/s2/favicons?domain=' + icon.domain + '&sz=64';
+    img.src = 'https://www.google.com/s2/favicons?domain=' + icon.domain + '&sz=128';
 
     el.appendChild(img);
     hero.appendChild(el);
@@ -1722,18 +1730,6 @@
     rafId = requestAnimationFrame(sync);
   }
   sync();
-
-  /* 3초마다 바닥에서 위로 반동 */
-  setInterval(function() {
-    for (var i = 0; i < pairs.length; i++) {
-      var b = pairs[i].body;
-      Body.setVelocity(b, {
-        x: (Math.random() - 0.5) * 7,
-        y: -(10 + Math.random() * 12),
-      });
-      Body.setAngularVelocity(b, (Math.random() - 0.5) * 0.4);
-    }
-  }, 3000);
 
   /* hero 뷰포트 이탈 시 일시정지 */
   window.addEventListener('scroll', function() {
@@ -1862,7 +1858,7 @@
       img.onerror = fb;
       var tmr = setTimeout(fb, 2200);
       img.onload = function() { clearTimeout(tmr); };
-      img.src = 'https://www.google.com/s2/favicons?domain=' + icon.domain + '&sz=64';
+      img.src = 'https://www.google.com/s2/favicons?domain=' + icon.domain + '&sz=128';
       el.appendChild(img);
       sec.appendChild(el);
 
@@ -1966,7 +1962,7 @@
   var amountEl = document.querySelector('.cred-amount');
   if (!digitsEl || !labelEl || !amountEl) return;
 
-  var steps    = ['5','50','500','5,000','50,000','500,000','5,000,000','50,000,000','500,000,000','5,000,000,000','50,000,000,000'];
+  var steps    = ['50,000,000,000','5,000,000,000','500,000,000','50,000,000','5,000,000','500,000','50,000','5,000','500'];
   var stepMs   = 85;
   var holdMs   = 700;
   var squashMs = 380;
