@@ -419,7 +419,7 @@
       white-space:nowrap;
       font-size:26px;
       font-weight:900;
-      color:rgba(17,17,17,0.22);
+      color:rgba(17,17,17,0.65);
       letter-spacing:-.02em;
       z-index:2;
       pointer-events:none;
@@ -427,7 +427,7 @@
     }
     .hero-platform-tag em {
       font-style:normal;
-      color:rgba(255,107,44,0.35);
+      color:rgba(255,107,44,0.85);
     }
     @media (max-width:768px) {
       .hero-platform-tag {
@@ -440,6 +440,16 @@
         margin-top:24px;
         display:block;
       }
+    }
+
+    @keyframes blink {
+      0%, 49% { opacity:1; }
+      50%, 100% { opacity:0; }
+    }
+    .blink-text {
+      font-style:normal;
+      color:var(--orange);
+      animation:blink 1s step-end infinite;
     }
 
     .hero-scroll {
@@ -514,6 +524,10 @@
     }
     .prob-title em { color:var(--orange); font-style:normal; }
 
+    .prob-caption {
+      font-size:13px; color:#aaa; font-weight:500; margin-bottom:12px;
+      line-height:1.7; letter-spacing:.01em;
+    }
     .prob-body p {
       font-size:14px; color:#666; line-height:1.85; margin-bottom:14px;
     }
@@ -609,6 +623,10 @@
     .solution {
       padding:110px 60px;
       background:#fff;
+    }
+    .sol-caption {
+      font-size:13px; color:#aaa; font-weight:500; margin-bottom:10px;
+      letter-spacing:.01em;
     }
     .sol-title {
       font-size:clamp(24px, 3vw, 38px); font-weight:900; line-height:1.3;
@@ -1032,6 +1050,7 @@
         <em>0%</em>에 가깝습니다.
       </h2>
       <div class="prob-body">
+        <p class="prob-caption">수 만개 리뷰의<br>'고인물' 브랜드 사이에서<br>우리 옷이 팔릴 확률은<br>0%에 가깝습니다.</p>
         <p>솔직히 말씀드리겠습니다.<br>대형 플랫폼은 이미 리뷰가 권력이 된 시장입니다.</p>
         <p>똑같이 광고비를 써도 리뷰가 적은 신생 브랜드는<br>들러리일 뿐입니다.</p>
         <p>대표로서 밤잠 설쳐가며 만든 그 옷,<br>퀄리티가 부족해서 안 팔리는 게 아닙니다.</p>
@@ -1174,14 +1193,15 @@
 <!-- ═══ SOLUTION ═══ -->
 <section class="solution" id="solution">
   <div class="container">
+    <p class="sol-caption">상세페이지에 수백만 원 쓰지 마세요.</p>
     <h2 class="sol-title">
       고객이 브랜드를 기억하는 시간은<br class="br-pc">
-      <em class="jump-text">단 5초</em> — 그 안에 서사가 없으면 이탈합니다.
+      <em class="blink-text">단 5초</em> — 그 안에 서사가 없으면 이탈합니다.
     </h2>
-    <p class="sol-sub">상세페이지에 수백만 원 쓰지 마세요. 고객은 상세페이지를 보기도 전에 광고에서 나갑니다.</p>
     <p class="sol-body">
-      우리는 데이터에서 소비자가 가장 반응하는 '결핍'을 찾아냅니다.<br class="br-pc">
-      단순히 예쁜 룩북이 아닌<br class="br-pc"> '체형 콤플렉스를 해결하는 15초 영상',
+      고객은 상세페이지를 보기도 전에 광고에서 나갑니다.<br>
+      우리는 데이터에서 소비자가 가장 반응하는 '결핍'을 찾아냅니다.<br>
+      단순히 예쁜 룩북이 아닌 '체형 콤플렉스를 해결하는 15초 영상',<br>
       '이 옷을 입고 갈 장소가 상상되는 서사'를 제공합니다.
     </p>
 
@@ -1361,7 +1381,7 @@
           <svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
         </div>
         <div>
-          <div class="stat-val">5.68</div>
+          <div class="stat-val">538%</div>
           <div class="stat-lbl">구매 ROAS (01/16~01/29)</div>
         </div>
       </div>
