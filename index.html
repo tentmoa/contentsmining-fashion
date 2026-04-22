@@ -1,0 +1,2177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>콘텐츠마이닝 | 패션 브랜드 마케팅 전략</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="alternate icon" href="favicon.svg">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+  <style>
+    /* ── Pretendard 폰트 ── */
+    @font-face { font-family:'Pretendard'; src:url('[Font] Pretendard/Pretendard-Thin.ttf') format('truetype'); font-weight:100; }
+    @font-face { font-family:'Pretendard'; src:url('[Font] Pretendard/Pretendard-ExtraLight.ttf') format('truetype'); font-weight:200; }
+    @font-face { font-family:'Pretendard'; src:url('[Font] Pretendard/Pretendard-Light.ttf') format('truetype'); font-weight:300; }
+    @font-face { font-family:'Pretendard'; src:url('[Font] Pretendard/Pretendard-Regular.ttf') format('truetype'); font-weight:400; }
+    @font-face { font-family:'Pretendard'; src:url('[Font] Pretendard/Pretendard-Medium.ttf') format('truetype'); font-weight:500; }
+    @font-face { font-family:'Pretendard'; src:url('[Font] Pretendard/Pretendard-SemiBold.ttf') format('truetype'); font-weight:60
+    0; }
+    @font-face { font-family:'Pretendard'; src:url('[Font] Pretendard/Pretendard-Bold.ttf') format('truetype'); font-weight:700; }
+    @font-face { font-family:'Pretendard'; src:url('[Font] Pretendard/Pretendard-ExtraBold.ttf') format('truetype'); font-weight:800; }
+    @font-face { font-family:'Pretendard'; src:url('[Font] Pretendard/Pretendard-Black.ttf') format('truetype'); font-weight:900; }
+
+    /* ── Reset ── */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      font-family:'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color:#111;
+      background:#fff;
+      overflow-x:hidden;
+    }
+
+    /* ── 변수 ── */
+    :root {
+      --orange: #FF6B2C;
+      --orange-light: rgba(255,107,44,0.10);
+      --orange-mid: rgba(255,107,44,0.20);
+      --cream: #FDF6F0;
+      --gray: #888;
+      --dark: #111;
+    }
+
+    /* ── 공통 컨테이너 ── */
+    .container { max-width:1100px; margin:0 auto; }
+
+    /* 한국어 줄바꿈 — 어절 단위 유지 */
+    h1, h2, h3, p, .hero-desc, .prob-body, .sol-body, .res-body, .cta-sub {
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+
+    /* PC 전용 줄바꿈 — 모바일에서 숨김 */
+    .br-pc { display: inline; }
+    @media (max-width: 768px) { .br-pc { display: none; } }
+
+    /* ── 블롭 ── */
+    .blob {
+      position:absolute;
+      border-radius:50%;
+      filter:blur(72px);
+      pointer-events:none;
+    }
+    .blob-orange {
+      background:radial-gradient(circle, #FFBB99 0%, #FF8C55 45%, transparent 70%);
+    }
+
+    /* ── 로고 '만' 비집고 들어오기 (반복) ── */
+    @keyframes manExpandLoop {
+      0%   { width: 0; }
+      11%  { width: 1.22em; }
+      20%  { width: 0.90em; }
+      28%  { width: 1.08em; }
+      34%  { width: 1em; }
+      68%  { width: 1em; }
+      82%  { width: 1.14em; }
+      100% { width: 0; }
+    }
+    @keyframes manPopLoop {
+      0%   { transform: scale(0) rotate(-22deg); opacity: 0; }
+      14%  { transform: scale(1.35) rotate(6deg); opacity: 1; }
+      24%  { transform: scale(0.82) rotate(-2deg); }
+      32%  { transform: scale(1.10) rotate(1deg); }
+      38%  { transform: scale(1) rotate(0); opacity: 1; }
+      68%  { transform: scale(1) rotate(0); opacity: 1; }
+      82%  { transform: scale(1.15) rotate(5deg); opacity: 0.8; }
+      100% { transform: scale(0) rotate(22deg); opacity: 0; }
+    }
+    .logo-man-wrap {
+      display: inline-block;
+      overflow: hidden;
+      white-space: nowrap;
+      width: 0;
+      vertical-align: baseline;
+      animation: manExpandLoop 3.6s cubic-bezier(.22,1,.36,1) 0.95s infinite;
+    }
+    .logo-man {
+      display: inline-block;
+      animation: manPopLoop 3.6s cubic-bezier(.36,.07,.19,.97) 0.95s infinite both;
+    }
+
+    /* ── '서사' 날아와 꽂히기 ── */
+    @keyframes stabIn {
+      0%   { transform: translate(-50px,-28px) rotate(-10deg) scale(1.7); opacity: 0; filter: blur(4px); }
+      48%  { transform: translate(3px,4px) rotate(2.5deg) scale(0.86); opacity: 1; filter: blur(0); }
+      64%  { transform: translate(-2px,-2px) rotate(-1deg) scale(1.07); }
+      80%  { transform: translate(1px,1px) rotate(0.4deg) scale(0.96); }
+      100% { transform: translate(0,0) rotate(0) scale(1); opacity: 1; }
+    }
+    .stab-word {
+      display: inline-block;
+      color: var(--orange);
+      font-weight: 900;
+      opacity: 0;
+      font-size: 1.35em;
+      line-height: 1;
+      vertical-align: middle;
+    }
+    .stab-word.stabbed {
+      animation: stabIn 0.68s cubic-bezier(.36,.07,.19,.97) forwards;
+    }
+
+    /* ── 캐러셀 도트 ── */
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 7px;
+      margin-top: 18px;
+    }
+    .cdot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.15);
+      cursor: pointer;
+      transition: background .25s, transform .25s;
+    }
+    .cdot.active {
+      background: var(--orange);
+      transform: scale(1.3);
+    }
+
+    /* ── PC 캐러셀 하이라이트 ── */
+    @media (min-width: 769px) {
+      .phones-wrap .phone {
+        transition: transform .5s ease, opacity .5s ease, box-shadow .5s ease;
+        opacity: 0.55;
+      }
+      .phones-wrap .phone.car-active {
+        opacity: 1;
+        box-shadow: 0 24px 56px rgba(0,0,0,.24), 0 4px 14px rgba(255,107,44,.18);
+      }
+      .phones-wrap .phone.car-active.phone-up {
+        transform: translateY(-22px) scale(1.04);
+      }
+      .phones-wrap .phone.car-active:not(.phone-up) {
+        transform: scale(1.04);
+      }
+      .sol-phones .sol-card {
+        transition: transform .5s ease, opacity .5s ease;
+        opacity: 0.55;
+      }
+      .sol-phones .sol-card.car-active {
+        opacity: 1;
+        transform: scale(1.03);
+      }
+    }
+
+    /* ── 글자 점프 애니메이션 ── */
+    @keyframes letterJump {
+      0%,  70%, 100% { transform:translateY(0) scaleY(1); }
+      20%            { transform:translateY(-13px) scaleY(1.1); }
+      35%            { transform:translateY(0)    scaleY(.92); }
+      45%            { transform:translateY(-5px) scaleY(1.04); }
+      55%            { transform:translateY(0)    scaleY(1); }
+    }
+    .jump-text .jl {
+      display:inline-block;
+      /* duration·delay는 JS에서 인라인으로 주입 */
+      animation:letterJump 2s cubic-bezier(.36,.07,.19,.97) infinite;
+      transform-origin:bottom center;
+    }
+
+    /* ══════════════════════════════════
+       NAV
+    ══════════════════════════════════ */
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:1000;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:18px 60px;
+      background:rgba(255,255,255,0.90);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      border-bottom:1px solid rgba(0,0,0,0.06);
+      transition:background .3s, box-shadow .3s;
+    }
+    .nav-logo {
+      font-size:16px; font-weight:900; color:#111;
+      text-decoration:none; letter-spacing:-.04em; line-height:1;
+    }
+    .nav-logo em { font-style:normal; color:var(--orange); } /* '만' 포함 em */
+    .nav-logo .logo-hapnida { color:#333; } /* '합니다'는 진한 회색 */
+    .nav-logo small {
+      display:block; font-size:9px; font-weight:500;
+      color:#bbb; letter-spacing:.06em; margin-top:2px; text-transform:uppercase;
+    }
+    .nav-links { display:flex; align-items:center; gap:32px; }
+    .nav-links a {
+      font-size:13px; font-weight:500; color:#666; text-decoration:none; transition:color .2s;
+    }
+    .nav-links a:hover { color:var(--orange); }
+    .nav-btn {
+      background:var(--orange); color:#fff; border:none;
+      padding:11px 24px; border-radius:50px;
+      font-family:'Pretendard',sans-serif; font-size:13px; font-weight:700;
+      cursor:pointer; text-decoration:none; transition:all .2s; white-space:nowrap;
+    }
+    .nav-btn:hover { background:#e85a1c; transform:translateY(-1px); }
+
+    /* ══════════════════════════════════
+       HERO  (Slide 1)
+    ══════════════════════════════════ */
+    .hero {
+      min-height:100vh;
+      background:var(--cream);
+      display:flex; align-items:center; justify-content:center;
+      position:relative; overflow:hidden;
+      padding:140px 60px 120px;
+    }
+    .hero .blob1 { width:600px; height:600px; top:-200px; left:-150px; opacity:.52; }
+    .hero .blob2 { width:480px; height:480px; bottom:-140px; right:-120px; opacity:.46; }
+
+    .hero-body {
+      position:relative; z-index:1;
+      text-align:center; max-width:720px;
+    }
+
+    /* 상단 뱃지 */
+    .hero-chip {
+      display:inline-flex; align-items:center; gap:10px;
+      background:none; border:none;
+      padding:0;
+      font-size:15px; font-weight:700; color:#333;
+      letter-spacing:-.01em;
+      margin-bottom:28px;
+      position:relative;
+    }
+    /* 왼쪽 오렌지 바 */
+    .hero-chip::before {
+      content:'';
+      display:inline-block;
+      width:3px; height:1.1em;
+      background:var(--orange);
+      border-radius:2px;
+      flex-shrink:0;
+    }
+    /* 물음표 강조 */
+    .hero-chip::after {
+      content:'';
+    }
+
+    /* 메인 타이틀 */
+    .hero-title {
+      font-size:clamp(42px, 6.5vw, 76px);
+      font-weight:900; line-height:1.1; letter-spacing:-.04em;
+      color:#111; margin-bottom:24px;
+    }
+    .hero-title em { color:var(--orange); font-style:normal; }
+    .hero-title .line-sm { font-size:clamp(30px, 4.5vw, 54px); font-weight:700; color:#444; }
+
+    /* 서브 설명 */
+    .hero-desc {
+      font-size:clamp(14px, 1.6vw, 17px);
+      color:#666; line-height:1.9; margin-bottom:36px;
+      max-width:580px; margin-left:auto; margin-right:auto;
+    }
+    .hero-desc strong { color:#111; font-weight:700; }
+
+    /* ── 본문 강조 — 손으로 그린 삐뚤빼뚤 밑줄 ── */
+    .hero-chip strong,
+    .hero-desc strong,
+    .prob-body strong,
+    .sol-body strong,
+    .res-title strong,
+    .res-body strong,
+    .cta-sub strong {
+      display:inline;
+      font-weight:700;
+      color:#111;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='12' viewBox='0 0 120 12'%3E%3Cpath d='M1,7 C10,3.5 18,10 28,6.5 C38,3 44,9.5 56,6 C66,3 74,9.8 86,6.5 C96,3.5 107,9.5 119,7' stroke='%23FF6B2C' stroke-width='4.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat:no-repeat;
+      background-size:100% 12px;
+      background-position:0 100%;
+      padding-bottom:5px;
+    }
+
+    /* 숫자 스탯 바 */
+    .hero-stats {
+      display:flex; align-items:center; justify-content:center;
+      gap:0; margin-bottom:40px;
+      background:rgba(255,255,255,.70);
+      border:1px solid rgba(0,0,0,.07);
+      border-radius:16px; padding:20px 32px;
+      backdrop-filter:blur(12px);
+      flex-wrap:wrap;
+    }
+    .hero-stat {
+      text-align:center; padding:0 28px;
+    }
+    .hero-stat + .hero-stat {
+      border-left:1px solid rgba(0,0,0,.08);
+    }
+    .hero-stat-val {
+      font-size:clamp(20px, 2.5vw, 26px);
+      font-weight:900; color:#111; letter-spacing:-.03em;
+      line-height:1;
+    }
+    .hero-stat-val em { color:var(--orange); font-style:normal; }
+    .hero-stat-lbl {
+      font-size:11px; color:#999; font-weight:500;
+      margin-top:5px; letter-spacing:.02em;
+    }
+
+    /* CTA — 안 A: 다크 버튼 + 빛 슬라이드 효과 */
+    @keyframes ctaShine {
+      0%   { left:-80%; }
+      55%  { left:130%; }
+      100% { left:130%; }
+    }
+    .hero-cta {
+      display:inline-block;
+      background:#111; color:#fff;
+      padding:18px 52px; border-radius:50px;
+      font-size:17px; font-weight:800; text-decoration:none;
+      box-shadow:0 8px 24px rgba(0,0,0,.22);
+      border:2px solid transparent;
+      transition:all .25s; letter-spacing:-.01em;
+      position:relative; overflow:hidden;
+      z-index:20;
+    }
+    .hero-cta::after {
+      content:'';
+      position:absolute; top:0; left:-80%;
+      width:55%; height:100%;
+      background:linear-gradient(
+        105deg,
+        transparent 30%,
+        rgba(255,255,255,.18) 50%,
+        rgba(255,255,255,.38) 55%,
+        rgba(255,255,255,.18) 60%,
+        transparent 70%
+      );
+      transform:skewX(-12deg);
+      animation:ctaShine 2.8s ease-in-out infinite;
+    }
+    .hero-cta:hover {
+      background:#1c1c1c;
+      border-color:var(--orange);
+      box-shadow:0 12px 32px rgba(0,0,0,.28);
+      transform:translateY(-2px);
+    }
+
+    /* 긴박감 노트 */
+    .hero-urgency {
+      margin-top:16px;
+      font-size:12px; color:#FF6B2C; font-weight:700;
+      letter-spacing:.02em;
+    }
+    .hero-urgency::before { content:'⚡ '; }
+
+    /* ── 광고 매체 아이콘 물리 시뮬레이션 ── */
+    .phys-icon-inq {
+      position:absolute;
+      width:46px; height:46px;
+      border-radius:13px;
+      overflow:hidden;
+      box-shadow:0 5px 20px rgba(0,0,0,.20);
+      pointer-events:none;
+      z-index:10;
+      will-change:transform;
+      background:#fff;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .phys-icon-inq img {
+      width:68%; height:68%;
+      object-fit:contain;
+      display:block;
+    }
+    @media (max-width:768px) {
+      .phys-icon-inq { width:36px; height:36px; border-radius:10px; }
+    }
+
+    .phys-icon {
+      position:absolute;
+      width:60px; height:60px;
+      border-radius:16px;
+      overflow:hidden;
+      box-shadow:0 6px 22px rgba(0,0,0,.24);
+      pointer-events:none;
+      z-index:5;
+      will-change:transform;
+      background:#fff;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .phys-icon img {
+      width:68%; height:68%;
+      object-fit:contain;
+      border-radius:0;
+      display:block;
+    }
+    @media (max-width:768px) {
+      .phys-icon { width:46px; height:46px; border-radius:12px; }
+    }
+
+    .hero-platform-tag {
+      position:absolute;
+      bottom:80px;
+      left:50%;
+      transform:translateX(-50%);
+      white-space:nowrap;
+      font-size:22px;
+      font-weight:800;
+      color:#111;
+      letter-spacing:-.03em;
+      z-index:15;
+      background:rgba(253,246,240,.72);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      padding:12px 28px;
+      border-radius:50px;
+      border:1.5px solid rgba(255,107,44,.18);
+      pointer-events:none;
+    }
+    .hero-platform-tag em {
+      font-style:normal;
+      color:var(--orange);
+    }
+    @media (max-width:768px) {
+      .hero-platform-tag {
+        font-size:16px;
+        padding:10px 20px;
+        bottom:72px;
+        white-space:normal;
+        text-align:center;
+        width:calc(100% - 48px);
+      }
+    }
+
+    .hero-scroll {
+      position:absolute; bottom:36px; left:50%; transform:translateX(-50%);
+      display:flex; flex-direction:column; align-items:center; gap:8px;
+      font-size:11px; color:#bbb; letter-spacing:.08em; font-weight:500;
+      animation:bob 2s ease-in-out infinite;
+    }
+    @keyframes bob { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+    .hero-scroll svg { width:20px; height:20px; stroke:#ccc; fill:none; }
+
+    /* ══════════════════════════════════
+       CREDIBILITY  (Slide 2)
+    ══════════════════════════════════ */
+    .credibility {
+      padding:110px 60px;
+      background:#fff;
+    }
+    .credibility .container { display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:center; }
+
+    .cred-text .eyebrow {
+      font-size:13px; font-weight:600; color:#bbb; letter-spacing:.08em; margin-bottom:16px; text-transform:uppercase;
+    }
+    .cred-title {
+      font-size:clamp(26px, 3.5vw, 42px); font-weight:900; line-height:1.28; letter-spacing:-.025em; margin-bottom:16px;
+    }
+    .cred-title em { color:var(--orange); font-style:normal; }
+    .cred-desc {
+      font-size:14px; color:#888; line-height:1.85; margin-bottom:8px;
+    }
+    .cred-highlight {
+      font-size:14px; color:var(--orange); font-weight:700; margin-bottom:0;
+    }
+    .cred-digits {
+      display: inline-block;
+      font-size: 0.72em;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .chart-card {
+      position:relative; background:#fff;
+      border-radius:20px; padding:32px 28px 24px;
+      border:1px solid #f0f0f0;
+      box-shadow:0 4px 24px rgba(0,0,0,.05);
+    }
+    .chart-watermark {
+      position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+      font-size:clamp(100px,13vw,200px); font-weight:900;
+      color:rgba(0,0,0,.04); pointer-events:none; user-select:none; z-index:0;
+      letter-spacing:-.05em;
+    }
+    .chart-card canvas { position:relative; z-index:1; }
+
+    /* ══════════════════════════════════
+       PROBLEM  (Slide 3)
+    ══════════════════════════════════ */
+    .problem {
+      padding:110px 60px;
+      background:var(--cream);
+      position:relative; overflow:hidden;
+    }
+    .problem .blob1 { width:500px; height:500px; top:-160px; left:-120px; opacity:.40; }
+    .problem .blob2 { width:320px; height:320px; bottom:-80px; right:-60px; opacity:.30; }
+
+    .problem .container {
+      display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; position:relative; z-index:1;
+    }
+
+    .prob-title {
+      font-size:clamp(24px, 3vw, 38px); font-weight:900; line-height:1.3; letter-spacing:-.025em; margin-bottom:28px;
+    }
+    .prob-title em { color:var(--orange); font-style:normal; }
+
+    .prob-body p {
+      font-size:14px; color:#666; line-height:1.85; margin-bottom:14px;
+    }
+    .prob-body .accent {
+      color:var(--orange); font-weight:700; font-size:15px;
+    }
+
+    /* ── 폰 공통 ── */
+    .phones-wrap {
+      display:grid; grid-template-columns:repeat(4,1fr); gap:10px; align-items:flex-end;
+    }
+    .phone {
+      background:#f0f0f0; border-radius:32px;
+      padding:7px; position:relative; overflow:hidden;
+      aspect-ratio:9/19;
+      box-shadow:0 20px 48px rgba(0,0,0,.18), 0 4px 12px rgba(0,0,0,.10), inset 0 0 0 1px rgba(0,0,0,.08);
+      border:2px solid #e8e8e8;
+    }
+    /* 다이나믹 아일랜드 */
+    .phone::before {
+      content:''; position:absolute; top:12px; left:50%; transform:translateX(-50%);
+      width:44px; height:13px; background:#111; border-radius:8px; z-index:10;
+    }
+    .phone-inner {
+      width:100%; height:100%; border-radius:26px; overflow:hidden; position:relative;
+    }
+
+    /* ── 이미지형 폰 스크린 ── */
+    .phone-img-wrap {
+      width:100%; height:100%; position:relative;
+    }
+    .phone-img-wrap img {
+      width:100%; height:100%; object-fit:cover; object-position:top center;
+      display:block;
+    }
+
+    /* TikTok/Instagram UI 오버레이 */
+    .phone-ui {
+      position:absolute; inset:0;
+      background:linear-gradient(to top, rgba(0,0,0,.75) 0%, rgba(0,0,0,.15) 45%, transparent 70%);
+      display:flex; flex-direction:column; justify-content:flex-end;
+    }
+    /* 상태바 */
+    .phone-ui::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:28px;
+      background:linear-gradient(to bottom, rgba(0,0,0,.3), transparent);
+    }
+    .phone-bottom {
+      padding:0 8px 8px;
+      display:flex; flex-direction:column; gap:4px;
+    }
+    .phone-user {
+      font-size:8px; font-weight:700; color:#fff; letter-spacing:.02em;
+    }
+    .phone-caption {
+      font-size:7px; color:rgba(255,255,255,.8); line-height:1.4;
+      max-width:75%;
+    }
+    /* 진행바 */
+    .phone-progress {
+      width:100%; height:2px; background:rgba(255,255,255,.25); border-radius:2px; margin-top:4px;
+    }
+    .phone-progress-fill {
+      height:100%; border-radius:2px; background:#fff;
+    }
+    /* 우측 액션 버튼 */
+    .phone-actions {
+      position:absolute; right:7px; bottom:40px;
+      display:flex; flex-direction:column; align-items:center; gap:10px;
+    }
+    .phone-action-btn {
+      display:flex; flex-direction:column; align-items:center; gap:2px;
+    }
+    .phone-action-btn svg { width:14px; height:14px; fill:#fff; }
+    .phone-action-btn span { font-size:6px; color:#fff; font-weight:600; }
+
+    /* 텍스트 스티커 */
+    .phone-sticker {
+      position:absolute;
+      background:rgba(255,107,44,.90); color:#fff;
+      font-size:7px; font-weight:800;
+      padding:4px 8px; border-radius:6px;
+      backdrop-filter:blur(4px);
+      transform:rotate(-2deg);
+    }
+
+    /* 2번째, 4번째 폰 살짝 위로 */
+    .phone-up { transform:translateY(-22px); }
+
+    /* ══════════════════════════════════
+       SOLUTION  (Slide 4)
+    ══════════════════════════════════ */
+    .solution {
+      padding:110px 60px;
+      background:#fff;
+    }
+    .sol-title {
+      font-size:clamp(24px, 3vw, 38px); font-weight:900; line-height:1.3;
+      letter-spacing:-.025em; margin-bottom:12px;
+    }
+    .sol-title em { color:var(--orange); font-style:normal; }
+    .sol-sub {
+      font-size:13px; color:#aaa; line-height:1.7; margin-bottom:6px;
+    }
+    .sol-body {
+      font-size:15px; color:#555; line-height:1.85; margin-bottom:52px; max-width:620px;
+    }
+
+    .sol-phones {
+      display:grid; grid-template-columns:repeat(4,1fr); gap:20px;
+    }
+    .sol-card { display:flex; flex-direction:column; align-items:center; gap:14px; }
+    .sol-pill {
+      background:var(--orange); color:#fff;
+      padding:8px 16px; border-radius:50px;
+      font-size:11px; font-weight:700; white-space:nowrap;
+      box-shadow:0 4px 12px rgba(255,107,44,.30);
+    }
+    .sol-phone {
+      background:#f0f0f0; border-radius:32px;
+      padding:7px; position:relative; overflow:hidden;
+      width:100%; aspect-ratio:9/19;
+      box-shadow:0 20px 48px rgba(0,0,0,.18), 0 4px 12px rgba(0,0,0,.10), inset 0 0 0 1px rgba(0,0,0,.08);
+      border:2px solid #e8e8e8;
+    }
+    .sol-phone::before {
+      content:''; position:absolute; top:12px; left:50%; transform:translateX(-50%);
+      width:44px; height:13px; background:#fff; border-radius:8px; z-index:10;
+    }
+    .sol-phone-inner {
+      width:100%; height:100%; border-radius:26px; overflow:hidden; position:relative;
+    }
+
+    /* ══════════════════════════════════
+       RESULTS  (Slide 5)
+    ══════════════════════════════════ */
+    .results {
+      padding:110px 60px;
+      background:#F8F8F8;
+    }
+    .results .container {
+      display:grid; grid-template-columns:1fr 280px; gap:48px; align-items:start;
+    }
+    .res-title {
+      font-size:clamp(24px, 3vw, 36px); font-weight:900; line-height:1.3;
+      letter-spacing:-.025em; margin-bottom:16px;
+    }
+    .res-title em { color:var(--orange); font-style:normal; }
+    .res-body {
+      font-size:13px; color:#777; line-height:1.85; margin-bottom:28px;
+    }
+    .res-body strong { color:#111; font-weight:700; }
+    .res-body a { color:var(--orange); font-weight:600; text-decoration:none; }
+
+    .line-wrap {
+      background:#fff; border-radius:16px; padding:24px 20px;
+      border:1px solid #eee;
+      box-shadow:0 2px 16px rgba(0,0,0,.04);
+    }
+
+    .stats-col { display:flex; flex-direction:column; gap:14px; }
+    .stat-card {
+      background:#fff; border-radius:16px; padding:20px 20px;
+      border:1px solid #efefef;
+      display:flex; align-items:center; gap:14px;
+      box-shadow:0 2px 12px rgba(0,0,0,.04);
+    }
+    .stat-icon {
+      width:42px; height:42px; flex-shrink:0;
+      background:var(--orange-light); border-radius:12px;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .stat-icon svg { width:20px; height:20px; fill:none; stroke:var(--orange); stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+    /* ── 플로팅 CTA 버튼 ── */
+    .fab {
+      position:fixed; bottom:28px; right:28px; z-index:900;
+      background:var(--orange); color:#fff;
+      padding:14px 22px; border-radius:50px;
+      font-family:'Pretendard',sans-serif; font-size:13px; font-weight:800;
+      text-decoration:none; display:flex; align-items:center; gap:7px;
+      box-shadow:0 8px 28px rgba(255,107,44,.50);
+      transition:opacity .3s ease, transform .3s ease, background .2s;
+      white-space:nowrap;
+      opacity:0; pointer-events:none; transform:translateY(12px); /* 초기: 숨김 */
+    }
+    .fab:hover { background:#e85a1c; transform:translateY(-2px); box-shadow:0 12px 36px rgba(255,107,44,.60); }
+    .fab-dot { width:7px; height:7px; background:#fff; border-radius:50%; opacity:.75; }
+    .stat-val { font-size:20px; font-weight:900; color:#111; letter-spacing:-.02em; }
+    .stat-lbl { font-size:11px; color:#bbb; margin-top:2px; font-weight:500; }
+
+    /* ══════════════════════════════════
+       CTA + INQUIRY  (Slide 6)
+    ══════════════════════════════════ */
+    .cta-section {
+      padding:120px 60px;
+      background:var(--cream);
+      position:relative; overflow:hidden;
+    }
+    .cta-section .blob1 { width:540px; height:540px; top:-160px; left:-120px; opacity:.45; }
+    .cta-section .blob2 { width:400px; height:400px; bottom:-120px; right:-80px; opacity:.40; }
+
+    .cta-inner {
+      max-width:800px; margin:0 auto;
+      text-align:center; position:relative; z-index:1;
+    }
+    .cta-icon {
+      width:56px; height:56px; background:var(--orange); border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      margin:0 auto 28px;
+      box-shadow:0 8px 22px rgba(255,107,44,.35);
+    }
+    .cta-icon svg { width:26px; height:26px; fill:#fff; }
+
+    .cta-title {
+      font-size:clamp(30px, 4.5vw, 52px); font-weight:900; line-height:1.3;
+      letter-spacing:-.03em; margin-bottom:20px;
+    }
+    .cta-title em { color:var(--orange); font-style:normal; }
+
+    .cta-sub {
+      font-size:15px; color:#888; line-height:1.85; margin-bottom:60px;
+    }
+    .cta-sub strong { color:#111; font-weight:700; }
+    .slot-updated {
+      display:inline-flex; align-items:center; gap:6px;
+      margin-top:8px;
+      font-size:11.5px; color:#888; font-weight:500;
+      letter-spacing:.01em;
+    }
+    .slot-live-dot {
+      width:7px; height:7px; border-radius:50%;
+      background:#22c55e; flex-shrink:0;
+      box-shadow:0 0 0 0 rgba(34,197,94,.5);
+      animation:livePulse 1.8s ease-out infinite;
+    }
+    @keyframes livePulse {
+      0%   { box-shadow:0 0 0 0 rgba(34,197,94,.55); }
+      70%  { box-shadow:0 0 0 7px rgba(34,197,94,.0); }
+      100% { box-shadow:0 0 0 0 rgba(34,197,94,.0); }
+    }
+
+    /* 문의 폼 카드 */
+    .form-card {
+      background:#fff; border-radius:24px; padding:48px 48px 44px;
+      box-shadow:0 12px 48px rgba(0,0,0,.10);
+      text-align:left;
+    }
+    .form-card-title { font-size:20px; font-weight:800; margin-bottom:6px; letter-spacing:-.02em; }
+    .form-card-sub { font-size:13px; color:#aaa; margin-bottom:32px; }
+
+    .form-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:0;
+    }
+    .fg { display:flex; flex-direction:column; gap:7px; margin-bottom:14px; }
+    .fg.full { grid-column:1/-1; }
+    .fg label { font-size:12px; font-weight:700; color:#555; letter-spacing:.02em; }
+    .fg label span { color:var(--orange); }
+    .fg input, .fg select, .fg textarea {
+      font-family:'Pretendard',sans-serif; font-size:14px;
+      padding:13px 16px; border:1.5px solid #ebebeb; border-radius:12px;
+      outline:none; background:#fafafa; color:#111;
+      transition:border-color .2s, background .2s;
+      resize:none;
+    }
+    .fg input:focus, .fg select:focus, .fg textarea:focus {
+      border-color:var(--orange); background:#fff;
+    }
+    .fg textarea { min-height:110px; }
+
+    .form-notice {
+      font-size:12px; color:#ccc; margin:8px 0 20px; text-align:left;
+    }
+    .form-notice a { color:var(--orange); text-decoration:none; }
+
+    .form-submit {
+      width:100%; background:var(--orange); color:#fff; border:none;
+      padding:17px; border-radius:14px;
+      font-family:'Pretendard',sans-serif; font-size:16px; font-weight:800;
+      cursor:pointer; letter-spacing:.01em;
+      transition:all .2s;
+      box-shadow:0 6px 20px rgba(255,107,44,.35);
+    }
+    .form-submit:hover { background:#e85a1c; transform:translateY(-1px); box-shadow:0 10px 28px rgba(255,107,44,.45); }
+
+    /* 제출 완료 */
+    .success-box {
+      display:none; text-align:center; padding:40px 20px;
+    }
+    .success-circle {
+      width:72px; height:72px; background:var(--orange); border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      margin:0 auto 20px;
+      box-shadow:0 8px 24px rgba(255,107,44,.40);
+    }
+    .success-circle svg { width:36px; height:36px; fill:#fff; }
+    .success-box h3 { font-size:22px; font-weight:900; margin-bottom:10px; }
+    .success-box p { font-size:14px; color:#999; line-height:1.8; }
+
+    /* ══════════════════════════════════
+       FOOTER
+    ══════════════════════════════════ */
+    footer {
+      background:#111; color:#555;
+      padding:52px 60px 40px;
+      display:flex; align-items:flex-start; justify-content:space-between;
+      flex-wrap:wrap; gap:28px;
+    }
+    .footer-logo { font-size:15px; font-weight:800; color:#fff; margin-bottom:12px; }
+    .footer-logo em { color:var(--orange); font-style:normal; }
+    .footer-info { font-size:11.5px; color:#555; line-height:2.0; }
+    .footer-info span { color:#444; }
+    .footer-right { font-size:11.5px; text-align:right; line-height:1.9; color:#444; }
+    @media (max-width:768px) {
+      footer { padding:40px 20px 32px; }
+      .footer-right { text-align:left; }
+    }
+
+    /* ══════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════ */
+    /* 문제 섹션 도트: 2열 그리드에서 우측 열(폰 아래)에 위치 */
+    .problem .container > .carousel-dots {
+      grid-column: 2;
+      margin-top: -32px;
+      align-self: start;
+    }
+
+    @media (max-width:1024px) {
+      nav { padding:16px 30px; }
+      .nav-links { display:none; }
+      .hero, .credibility, .problem, .solution, .results, .cta-section { padding-left:30px; padding-right:30px; }
+      .credibility .container { grid-template-columns:1fr; gap:48px; }
+      .problem .container { grid-template-columns:1fr; gap:48px; }
+      .results .container { grid-template-columns:1fr; gap:32px; }
+      .stats-col { flex-direction:row; flex-wrap:wrap; }
+      .stat-card { flex:1; min-width:180px; }
+      .hero-stats { gap:0; padding:16px 20px; }
+      .hero-stat { padding:0 18px; }
+      /* 태블릿/모바일: 1열 그리드로 전환 시 도트 자동 배치 */
+      .problem .container > .carousel-dots {
+        grid-column: 1;
+        margin-top: 0;
+      }
+    }
+
+    @media (max-width:768px) {
+      nav { padding:13px 20px; }
+      .hero { padding:90px 20px 80px; }
+      .hero-desc { font-size:14px; }
+      .hero-stats { border-radius:14px; padding:16px 12px; gap:0; }
+      .hero-stat { padding:0 14px; }
+      .hero-stat + .hero-stat { border-left:1px solid rgba(0,0,0,.08); }
+      .credibility, .problem, .solution, .results, .cta-section { padding:72px 20px; }
+      .form-card { padding:28px 20px; }
+      .form-grid { grid-template-columns:1fr; }
+      footer { padding:32px 20px; flex-direction:column; text-align:left; }
+      .footer-right { text-align:left; }
+      .hero-scroll { display:none; }
+      /* 성과 카드 모바일: 단일 컬럼 */
+      .stats-col { flex-direction:column !important; }
+      .stat-card { flex:none !important; min-width:0 !important; }
+      .stat-val { font-size:18px; white-space:nowrap; }
+
+      /* ── 모바일 폰 캐러셀 ── */
+      .phones-wrap {
+        display:flex !important;
+        grid-template-columns:unset !important;
+        overflow-x:scroll;
+        scroll-snap-type:x mandatory;
+        -webkit-overflow-scrolling:touch;
+        gap:14px;
+        padding:8px 20px 28px;
+        scrollbar-width:none;
+        /* 첫 번째 카드 중앙 정렬을 위한 scroll-padding */
+        scroll-padding-left:20px;
+      }
+      .phones-wrap::-webkit-scrollbar { display:none; }
+      .phones-wrap .phone {
+        scroll-snap-align:center;
+        flex:0 0 68%;
+        aspect-ratio:9/19;
+      }
+      .phones-wrap .phone-up { transform:translateY(0) !important; }
+
+      .sol-phones {
+        display:flex !important;
+        grid-template-columns:unset !important;
+        overflow-x:scroll;
+        scroll-snap-type:x mandatory;
+        -webkit-overflow-scrolling:touch;
+        gap:14px;
+        padding:8px 20px 28px;
+        scrollbar-width:none;
+        scroll-padding-left:20px;
+      }
+      .sol-phones::-webkit-scrollbar { display:none; }
+      .sol-phones .sol-card {
+        scroll-snap-align:center;
+        flex:0 0 68%;
+        min-width:0;
+      }
+    }
+
+    @media (max-width:480px) {
+      .hero-stats { flex-direction:column; gap:12px; }
+      .hero-stat + .hero-stat { border-left:none; border-top:1px solid rgba(0,0,0,.07); padding-top:12px; }
+      .phones-wrap .phone { flex:0 0 74%; }
+      .sol-phones .sol-card { flex:0 0 74%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <a href="#" class="nav-logo">
+    패션마케팅<em><span class="logo-man-wrap"><span class="logo-man">만</span></span></em><span class="logo-hapnida">합니다</span>
+    <small>Contents Mining</small>
+  </a>
+  <a href="#inquiry" class="nav-btn">매출 전략 논의하기 →</a>
+</nav>
+
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="blob blob-orange blob1" style="width:600px;height:600px;top:-200px;left:-150px;opacity:.52;"></div>
+  <div class="blob blob-orange blob2" style="width:480px;height:480px;bottom:-140px;right:-120px;opacity:.46;"></div>
+
+  <div class="hero-body">
+
+    <div class="hero-chip">제품은 자신 있는데 <strong>안 팔린다면</strong><em style="color:var(--orange);font-style:normal;">?</em></div>
+
+    <h1 class="hero-title">
+      광고비보다<br>
+      <em>팔리는 이유</em>가<br>
+      <span class="line-sm">먼저입니다.</span>
+    </h1>
+
+    <p class="hero-desc">
+      수백만 원을 광고에 태워도 매출이 안 나온다면,<br class="br-pc">
+      문제는 제품이 아닙니다.<br class="br-pc">
+      고객의 결핍을 정확히 찌르는 <span class="stab-word">'서사'</span>가 없기 때문입니다.
+    </p>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-val jump-text">500억+</div>
+        <div class="hero-stat-lbl">패션 판매 누적 실적</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">ROAS <em>5.68</em></div>
+        <div class="hero-stat-lbl">광고 수익률 달성</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val jump-text">8,000만</div>
+        <div class="hero-stat-lbl">3주 만에 주간 매출</div>
+      </div>
+    </div>
+
+    <a href="#inquiry" class="hero-cta">우리 같이 전략 짜볼까요? →</a>
+
+  </div>
+
+  <div class="hero-platform-tag">
+    플랫폼에 의존하지 말고 <em>'정복'</em>하세요.
+  </div>
+
+  <div class="hero-scroll">
+    SCROLL
+    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+</section>
+
+
+<!-- ═══ CREDIBILITY ═══ -->
+<section class="credibility" id="credibility">
+  <div class="container">
+    <div class="cred-text">
+      <p class="eyebrow">500억 원의 데이터</p>
+      <h2 class="cred-title">
+        <em class="cred-amount" id="credAmount"><span class="cred-digits">50,000,000,000</span><span class="cred-label" style="display:none">500억</span> 원</em>을<br>직접 팔아보며<br>찾았습니다.
+      </h2>
+      <p class="cred-desc">
+        무신사 입점과 에이블리 광고에 수백만 원을 태우고도<br>
+        ROAS 200%에 허덕이고 있다면,<br>
+        이 글을 3번만 읽어주세요.
+      </p>
+      <p class="cred-highlight">→ 3번만 읽어주세요.</p>
+    </div>
+    <div class="chart-card">
+      <div class="chart-watermark">500</div>
+      <canvas id="barChart"></canvas>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ PROBLEM ═══ -->
+<section class="problem" id="problem">
+  <div class="blob blob-orange blob1" style="width:500px;height:500px;top:-160px;left:-120px;opacity:.38;"></div>
+  <div class="blob blob-orange blob2" style="width:320px;height:320px;bottom:-80px;right:-60px;opacity:.28;"></div>
+
+  <div class="container">
+    <div class="prob-text">
+      <h2 class="prob-title">
+        수 만개 리뷰의 '고인물' 브랜드 사이에서<br class="br-pc">
+        우리 옷이 팔릴 확률은 <em class="jump-text">0%</em>에 가깝습니다.
+      </h2>
+      <div class="prob-body">
+        <p>솔직히 말씀드리겠습니다.<br>대형 플랫폼은 이미 리뷰가 권력이 된 시장입니다.</p>
+        <p>똑같이 광고비를 써도 리뷰가 적은 신생 브랜드는<br>들러리일 뿐입니다.</p>
+        <p>대표로서 밤잠 설쳐가며 만든 그 옷,<br>퀄리티가 부족해서 안 팔리는 게 아닙니다.</p>
+        <p class="accent">노출되는 방식이 잘못되었기 때문입니다.</p>
+      </div>
+    </div>
+
+    <div class="phones-wrap">
+
+      <!-- Phone 1 : 드라마틱 편집 사진 -->
+      <div class="phone">
+        <div class="phone-inner">
+          <div class="phone-img-wrap">
+            <img
+              src="https://images.unsplash.com/photo-1524407806690-2b914a741648?w=360&h=660&fit=crop&crop=faces,top&q=82"
+              alt="패션 콘텐츠" loading="lazy">
+            <div class="phone-ui">
+              <div class="phone-actions">
+                <div class="phone-action-btn">
+                  <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                  <span>3.2만</span>
+                </div>
+                <div class="phone-action-btn">
+                  <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                  <span>847</span>
+                </div>
+                <div class="phone-action-btn">
+                  <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+                  <span>공유</span>
+                </div>
+              </div>
+              <div class="phone-bottom">
+                <div class="phone-user">@kstyle_daily</div>
+                <div class="phone-caption">오늘의 무드 🖤 #패션 #OOTD #daily</div>
+                <div class="phone-progress"><div class="phone-progress-fill" style="width:38%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phone 2 (raised) : what i'm wearing today -->
+      <div class="phone phone-up">
+        <div class="phone-inner">
+          <div class="phone-img-wrap">
+            <img
+              src="https://images.unsplash.com/photo-1541823709867-1b206113eafd?w=360&h=660&fit=crop&crop=faces,center&q=82"
+              alt="패션 콘텐츠" loading="lazy">
+            <div class="phone-sticker" style="top:28%;left:8%;transform:rotate(-3deg);">
+              what i'm<br>wearing today ✨
+            </div>
+            <div class="phone-ui">
+              <div class="phone-actions">
+                <div class="phone-action-btn">
+                  <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                  <span>5.8만</span>
+                </div>
+                <div class="phone-action-btn">
+                  <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                  <span>1.2천</span>
+                </div>
+              </div>
+              <div class="phone-bottom">
+                <div class="phone-user">@outfit_inspo</div>
+                <div class="phone-caption">요즘 제 최애 코트 💕 어디서 샀냐고요?</div>
+                <div class="phone-progress"><div class="phone-progress-fill" style="width:62%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phone 3 : 캐주얼 스트리트 -->
+      <div class="phone">
+        <div class="phone-inner">
+          <div class="phone-img-wrap">
+            <img
+              src="https://images.unsplash.com/photo-1568183190974-3c36dc95f843?w=360&h=660&fit=crop&crop=faces,center&q=82"
+              alt="패션 콘텐츠" loading="lazy">
+            <div class="phone-ui">
+              <div class="phone-actions">
+                <div class="phone-action-btn">
+                  <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                  <span>1.1만</span>
+                </div>
+                <div class="phone-action-btn">
+                  <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                  <span>293</span>
+                </div>
+              </div>
+              <div class="phone-bottom">
+                <div class="phone-user">@street_looks</div>
+                <div class="phone-caption">오버사이즈 무드 🧥 #streetwear</div>
+                <div class="phone-progress"><div class="phone-progress-fill" style="width:55%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phone 4 (raised) : 컬러풀 숏폼 -->
+      <div class="phone phone-up">
+        <div class="phone-inner">
+          <div class="phone-img-wrap">
+            <img
+              src="https://images.unsplash.com/photo-1716657908147-b2652fc50f52?w=360&h=660&fit=crop&crop=faces,top&q=82"
+              alt="패션 콘텐츠" loading="lazy">
+            <div class="phone-ui">
+              <div class="phone-actions">
+                <div class="phone-action-btn">
+                  <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                  <span>2.4만</span>
+                </div>
+                <div class="phone-action-btn">
+                  <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                  <span>716</span>
+                </div>
+              </div>
+              <div class="phone-bottom">
+                <div class="phone-user">@hat.fashion</div>
+                <div class="phone-caption">이 모자 하나로 완성 🧢 #캐주얼룩</div>
+                <div class="phone-progress"><div class="phone-progress-fill" style="width:78%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="carousel-dots" id="probDots">
+      <span class="cdot active"></span>
+      <span class="cdot"></span>
+      <span class="cdot"></span>
+      <span class="cdot"></span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SOLUTION ═══ -->
+<section class="solution" id="solution">
+  <div class="container">
+    <h2 class="sol-title">
+      고객이 브랜드를 기억하는 시간은<br class="br-pc">
+      <em class="jump-text">단 5초</em> — 그 안에 서사가 없으면 이탈합니다.
+    </h2>
+    <p class="sol-sub">상세페이지에 수백만 원 쓰지 마세요. 고객은 상세페이지를 보기도 전에 광고에서 나갑니다.</p>
+    <p class="sol-body">
+      우리는 데이터에서 소비자가 가장 반응하는 <strong>'결핍'</strong>을 찾아냅니다.<br class="br-pc">
+      단순히 예쁜 룩북이 아닌<br class="br-pc"> '체형 콤플렉스를 해결하는 15초 영상',
+      '이 옷을 입고 갈 장소가 상상되는 서사'를 제공합니다.
+    </p>
+
+    <div class="sol-phones">
+
+      <!-- S1 : 배꼽에 어울리는 코디 -->
+      <div class="sol-card">
+        <div class="sol-pill">배꼽에 어울리는 코디</div>
+        <div class="sol-phone">
+          <div class="sol-phone-inner">
+            <div class="phone-img-wrap">
+              <img
+                src="https://images.unsplash.com/photo-1632765907296-92b2154d3704?w=360&h=660&fit=crop&crop=faces,center&q=82"
+                alt="배꼽에 어울리는 코디" loading="lazy">
+              <div class="phone-sticker" style="top:30%;left:6%;">Today's<br>backpack look 🎒</div>
+              <div class="phone-ui">
+                <div class="phone-actions">
+                  <div class="phone-action-btn">
+                    <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <span>4.7만</span>
+                  </div>
+                  <div class="phone-action-btn">
+                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                    <span>1.8천</span>
+                  </div>
+                </div>
+                <div class="phone-bottom">
+                  <div class="phone-user">@contentsm_official</div>
+                  <div class="phone-caption">배꼽라인 살리는 코디 조합 공개 👀</div>
+                  <div class="phone-progress"><div class="phone-progress-fill" style="width:45%"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- S2 : 스타일을 살리는 아이템 -->
+      <div class="sol-card">
+        <div class="sol-pill">스타일을 살리는 아이템</div>
+        <div class="sol-phone">
+          <div class="sol-phone-inner">
+            <div class="phone-img-wrap">
+              <img
+                src="https://images.unsplash.com/photo-1643616955173-1c5af154060e?w=360&h=660&fit=crop&crop=faces,center&q=82"
+                alt="스타일을 살리는 아이템" loading="lazy">
+              <div class="phone-ui">
+                <div class="phone-actions">
+                  <div class="phone-action-btn">
+                    <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <span>8.3만</span>
+                  </div>
+                  <div class="phone-action-btn">
+                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                    <span>2.4천</span>
+                  </div>
+                </div>
+                <div class="phone-bottom">
+                  <div class="phone-user">@contentsm_official</div>
+                  <div class="phone-caption">이 아이템 하나면 스타일 완성 🖤 #모노톤</div>
+                  <div class="phone-progress"><div class="phone-progress-fill" style="width:58%"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- S3 : 얼굴이 작아보이는 코디 -->
+      <div class="sol-card">
+        <div class="sol-pill">얼굴이 작아보이는 코디</div>
+        <div class="sol-phone">
+          <div class="sol-phone-inner">
+            <div class="phone-img-wrap">
+              <img
+                src="https://images.unsplash.com/photo-1737139355588-b5656b8c7379?w=360&h=660&fit=crop&crop=faces,top&q=82"
+                alt="얼굴이 작아보이는 코디" loading="lazy">
+              <div class="phone-sticker" style="bottom:28%;left:6%;transform:rotate(1deg);">
+                "얼굴 진짜 작아보여요~" 👏
+              </div>
+              <div class="phone-ui">
+                <div class="phone-actions">
+                  <div class="phone-action-btn">
+                    <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <span>6.1만</span>
+                  </div>
+                  <div class="phone-action-btn">
+                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                    <span>2.0천</span>
+                  </div>
+                </div>
+                <div class="phone-bottom">
+                  <div class="phone-user">@contentsm_official</div>
+                  <div class="phone-caption">얼굴 작아보이는 후드 매칭법 🤍 #패션팁</div>
+                  <div class="phone-progress"><div class="phone-progress-fill" style="width:71%"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- S4 : 단점을 보완해주는 아이템 -->
+      <div class="sol-card">
+        <div class="sol-pill">단점을 보완해주는 아이템</div>
+        <div class="sol-phone">
+          <div class="sol-phone-inner">
+            <div class="phone-img-wrap">
+              <img
+                src="https://images.unsplash.com/photo-1635353866477-f77a828b431a?w=360&h=660&fit=crop&crop=faces,center&q=82"
+                alt="단점을 보완해주는 아이템" loading="lazy">
+              <div class="phone-ui">
+                <div class="phone-actions">
+                  <div class="phone-action-btn">
+                    <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <span>5.5만</span>
+                  </div>
+                  <div class="phone-action-btn">
+                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                    <span>1.6천</span>
+                  </div>
+                </div>
+                <div class="phone-bottom">
+                  <div class="phone-user">@contentsm_official</div>
+                  <div class="phone-caption">단점 커버하는 레이어드 룩 ✨ #체형커버</div>
+                  <div class="phone-progress"><div class="phone-progress-fill" style="width:83%"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="carousel-dots" id="solDots">
+      <span class="cdot active"></span>
+      <span class="cdot"></span>
+      <span class="cdot"></span>
+      <span class="cdot"></span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ RESULTS ═══ -->
+<section class="results" id="results">
+  <div class="container">
+    <div>
+      <h2 class="res-title">
+        검색량 Zero인 신생 패션 브랜드,<br class="br-pc">
+        마케팅 <strong>3주 만에</strong> 주간 매출 <em class="jump-text">8,000만 원</em>
+      </h2>
+      <p class="res-body">
+        상상이 아닙니다.<br class="br-pc"> 자사몰 중심의 콘텐츠 마케팅으로 플랫폼 수수료를 아끼고<br class="br-pc">
+        그 비용을 다시 <strong>'전환되는 콘텐츠'</strong>에 투자한 결과입니다.<br class="br-pc">
+        배00 브랜드: 누적 조회 180만 회 &nbsp;|&nbsp; 전000 브랜드: 누적 조회 100만 회.
+        <a href="#inquiry">콘텐츠마이닝의 공식 로직</a>은 이미 잘 작동하고 있습니다.
+      </p>
+      <div class="line-wrap">
+        <canvas id="lineChart"></canvas>
+      </div>
+    </div>
+
+    <div class="stats-col">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <!-- 구매 전환: 쇼핑백 -->
+          <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4H6z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </div>
+        <div>
+          <div class="stat-val">1억 1천만 원</div>
+          <div class="stat-lbl">구매 전환값 (01/16~01/29)</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <!-- ROAS: 상승 추세 -->
+          <svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        </div>
+        <div>
+          <div class="stat-val">5.68</div>
+          <div class="stat-lbl">구매 ROAS (01/16~01/29)</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <!-- 객단가: 가격 태그 -->
+          <svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+        </div>
+        <div>
+          <div class="stat-val">약 36,500원</div>
+          <div class="stat-lbl">객단가 (01/16~01/29)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ CTA + INQUIRY ═══ -->
+<section class="cta-section" id="inquiry">
+  <div class="blob blob-orange blob1" style="width:540px;height:540px;top:-160px;left:-120px;opacity:.42;"></div>
+  <div class="blob blob-orange blob2" style="width:400px;height:400px;bottom:-120px;right:-80px;opacity:.38;"></div>
+
+  <div class="cta-inner">
+    <div class="cta-icon">
+      <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+    </div>
+
+    <h2 class="cta-title">
+      제품은 자신 있는데<br class="br-pc">
+      마케팅이 막막하다면,<br class="br-pc">
+      <em>콘텐츠마이닝</em>이 함께합니다.
+    </h2>
+    <p class="cta-sub">
+      브랜드의 가치를 깊이 파악하기 위해 한 달에 5곳의 패션 파트너사만 선정합니다.
+      <br class="br-pc">현재 <strong>2곳의 자리</strong>가 남아 있습니다.
+      <span class="slot-updated"><span class="slot-live-dot"></span><span id="slotUpdated"></span></span>
+    </p>
+
+    <div class="form-card">
+      <h3 class="form-card-title">매출 전략 논의 신청</h3>
+      <p class="form-card-sub">빠른 시간 내에 '가장 적합한' 담당자를 배정하여 연락드립니다.</p>
+
+      <form id="inquiryForm">
+        <div class="form-grid">
+          <div class="fg">
+            <label>브랜드명 <span>*</span></label>
+            <input type="text" placeholder="회사명" required>
+          </div>
+          <div class="fg">
+            <label>성함 <span>*</span></label>
+            <input type="text" placeholder="담당자명" required>
+          </div>
+          <div class="fg">
+            <label>연락처 <span>*</span></label>
+            <input type="tel" placeholder="010 - 0000 - 0000" required>
+          </div>
+          <div class="fg">
+            <label>이메일 주소 <span>*</span></label>
+            <input type="email" placeholder="이메일" required>
+          </div>
+        </div>
+        <p class="form-notice">
+          신청 시 <a href="#">개인정보 처리방침</a>에 동의한 것으로 간주합니다.
+        </p>
+        <button type="submit" class="form-submit">전략 논의 신청하기 →</button>
+      </form>
+
+      <div class="success-box" id="successBox">
+        <div class="success-circle">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+        </div>
+        <h3>신청이 완료되었습니다!</h3>
+        <p>빠른 시간 내에 담당자가 연락드리겠습니다.<br>콘텐츠마이닝을 선택해 주셔서 감사합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ 플로팅 CTA ═══ -->
+<a href="#inquiry" class="fab">
+  <span class="fab-dot"></span>
+  전략 논의하기 →
+</a>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div>
+    <div class="footer-logo">패션마케팅<em>만</em><span style="color:#aaa">합니다</span></div>
+    <div class="footer-info">
+      <p><span>상호명</span> 유한회사 콘텐츠마이닝</p>
+      <p><span>대표자</span> 박남준</p>
+      <p><span>사업자등록번호</span> 541-88-03700</p>
+      <p><span>사업장주소</span> 서울특별시 강남구 테헤란로 70길 12, 402-643 에이호(대치동)</p>
+      <p><span>고객센터</span> 0505-306-7777</p>
+    </div>
+  </div>
+  <div class="footer-right">
+    <p>© 2026 콘텐츠마이닝. All rights reserved.</p>
+    <p style="margin-top:4px;color:#555;">패션 브랜드를 위한 데이터 기반 콘텐츠 마케팅</p>
+  </div>
+</footer>
+
+
+<!-- ═══ SCRIPTS ═══ -->
+<script>
+/* ── Bar Chart (Credibility) ── */
+(function() {
+  const ctx = document.getElementById('barChart').getContext('2d');
+  const labels = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const data   = [28, 35, 42, 48, 56, 63, 72, 79, 85, 88, 93, 98];
+
+  new Chart(ctx, {
+    type:'bar',
+    data:{
+      labels,
+      datasets:[{
+        data,
+        backgroundColor: data.map((v,i) => i === data.length-1 ? '#FF6B2C' : 'rgba(255,107,44,0.75)'),
+        borderRadius: 7,
+        borderSkipped: false,
+        barPercentage: 0.65,
+      }]
+    },
+    options:{
+      responsive:true,
+      plugins:{ legend:{display:false}, tooltip:{
+        callbacks:{ label: c => ` ${c.raw}억 원` },
+        backgroundColor:'#111', titleColor:'#fff', bodyColor:'#FF6B2C',
+        padding:10, cornerRadius:8
+      }},
+      scales:{
+        y:{
+          beginAtZero:true, max:120,
+          ticks:{ callback: v => `${v}억`, font:{family:'Pretendard',size:11}, color:'#bbb' },
+          grid:{ color:'rgba(0,0,0,0.05)' }, border:{display:false}
+        },
+        x:{
+          ticks:{ font:{family:'Pretendard',size:11}, color:'#bbb' },
+          grid:{display:false}, border:{display:false}
+        }
+      }
+    }
+  });
+})();
+
+
+/* ── Line Chart (Results) — 뷰포트 진입 시 선이 그려짐 ── */
+(function() {
+  var ctx = document.getElementById('lineChart').getContext('2d');
+  var grad = ctx.createLinearGradient(0,0,0,280);
+  grad.addColorStop(0,'rgba(255,107,44,0.28)');
+  grad.addColorStop(1,'rgba(255,107,44,0.00)');
+
+  var realData = [0, 800, 3200, 3200, 3800, 4500, 6200, 7400, 8031];
+  var totalDur = 2000;
+  var delay    = totalDur / realData.length;
+
+  var lineChart = new Chart(ctx, {
+    type:'line',
+    data:{
+      labels:['01/12','01/15','01/18','01/19','01/22','01/25','01/26','01/28','01/30'],
+      datasets:[{
+        data: realData.map(function() { return 0; }), /* 0에서 시작 */
+        borderColor:'#FF6B2C',
+        backgroundColor: grad,
+        borderWidth:2.5,
+        pointBackgroundColor:'#FF6B2C',
+        pointBorderColor:'#fff',
+        pointBorderWidth:2,
+        pointRadius: [3,3,5,3,3,3,5,3,6],
+        fill:true,
+        tension:0.42
+      }]
+    },
+    options:{
+      responsive:true,
+      animation:{
+        x:{ type:'number', easing:'linear', duration: delay,
+          from: NaN,
+          delay: function(ctx) {
+            if (ctx.type !== 'data' || ctx.xStarted) return 0;
+            ctx.xStarted = true;
+            return ctx.index * delay;
+          }
+        },
+        y:{ type:'number', easing:'easeOutQuart', duration: delay,
+          from: function(ctx) {
+            if (ctx.index === 0) return 0;
+            var meta = ctx.chart.getDatasetMeta(ctx.datasetIndex);
+            var prev = meta.data[ctx.index - 1];
+            return prev ? prev.getProps(['y'], true).y : 0;
+          },
+          delay: function(ctx) {
+            if (ctx.type !== 'data' || ctx.yStarted) return 0;
+            ctx.yStarted = true;
+            return ctx.index * delay;
+          }
+        }
+      },
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          callbacks:{ label: function(c) { return ' ' + c.raw.toLocaleString() + '만 원'; } },
+          backgroundColor:'#111', titleColor:'#fff', bodyColor:'#FF6B2C',
+          padding:10, cornerRadius:8
+        }
+      },
+      scales:{
+        y:{
+          beginAtZero:true,
+          ticks:{
+            callback: function(v) { return v===0 ? '0' : (v/1000).toFixed(0)+'천만'; },
+            font:{family:'Pretendard',size:10}, color:'#ccc', maxTicksLimit:6
+          },
+          grid:{color:'rgba(0,0,0,0.05)'}, border:{display:false}
+        },
+        x:{
+          ticks:{font:{family:'Pretendard',size:10}, color:'#bbb'},
+          grid:{display:false}, border:{display:false}
+        }
+      }
+    }
+  });
+
+  /* 뷰포트 진입 시 실제 데이터로 업데이트 → 애니메이션 재생 */
+  var drawn = false;
+  new IntersectionObserver(function(entries, obs) {
+    if (!entries[0].isIntersecting || drawn) return;
+    drawn = true;
+    obs.disconnect();
+    lineChart.data.datasets[0].data = realData;
+    lineChart.update();
+  }, { threshold: 0.35 }).observe(document.getElementById('lineChart'));
+})();
+
+
+/* ── Jump-text: 각 글자가 독립적으로 랜덤 타이밍에 뛰기 ── */
+(function() {
+  document.querySelectorAll('.jump-text').forEach(function(el) {
+    var chars = el.textContent.split('');
+    el.innerHTML = chars.map(function(ch) {
+      if (ch === ' ') return '<span style="display:inline-block;width:.25em">&nbsp;</span>';
+      /* 딜레이: 0~2.5s 랜덤, 주기: 1.6~2.8s 랜덤 → 글자마다 완전히 다른 타이밍 */
+      var delay    = (Math.random() * 2.5).toFixed(2);
+      var duration = (1.6 + Math.random() * 1.2).toFixed(2);
+      return '<span class="jl" style="animation-delay:' + delay + 's;animation-duration:' + duration + 's">' + ch + '</span>';
+    }).join('');
+  });
+})();
+
+
+/* ── 광고 매체 아이콘 Matter.js 물리 시뮬레이션 ── */
+(function() {
+  if (typeof Matter === 'undefined') return;
+
+  var ICONS = [
+    { domain:'instagram.com',  label:'IG', bg:'linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)' },
+    { domain:'tiktok.com',     label:'TK', bg:'#010101' },
+    { domain:'kakaocorp.com',  label:'K',  bg:'#FEE500', color:'#391B1B' },
+    { domain:'naver.com',      label:'N',  bg:'#03C75A' },
+    { domain:'musinsa.com',    label:'M',  bg:'#1C1C1C' },
+    { domain:'a-bly.com',      label:'A',  bg:'#FF3478' },
+    { domain:'youtube.com',    label:'▶',  bg:'#FF0000' },
+    { domain:'google.com',     label:'G',  bg:'#fff', color:'#4285F4' },
+    { domain:'pinterest.com',  label:'P',  bg:'#E60023' },
+    { domain:'meta.com',       label:'f',  bg:'#0866FF' },
+    { domain:'kream.co.kr',    label:'KR', bg:'#111' },
+    { domain:'daangn.com',     label:'🥕', bg:'#FF7E36' },
+    { domain:'zigzag.kr',      label:'Z',  bg:'#FF338F' },
+    { domain:'29cm.co.kr',     label:'29', bg:'#222' },
+    { domain:'wconcept.co.kr', label:'W',  bg:'#000' },
+    { domain:'brandi.co.kr',   label:'B',  bg:'#FF3B77' },
+    { domain:'kakaostyle.com', label:'KS', bg:'#FFCD00', color:'#391B1B' },
+    { domain:'coupang.com',    label:'CP', bg:'#C5172E' },
+    { domain:'oliveyoung.co.kr',label:'OY',bg:'#007B40' },
+    { domain:'twitter.com',    label:'X',  bg:'#000' },
+  ];
+
+  var hero = document.querySelector('.hero');
+  if (!hero) return;
+
+  var ICO   = window.innerWidth <= 768 ? 46 : 60;
+  var HALF  = ICO / 2;
+  var THICK = 60;
+  var W     = hero.offsetWidth;
+  var H     = hero.offsetHeight;
+
+  var Engine    = Matter.Engine;
+  var Runner    = Matter.Runner;
+  var Bodies    = Matter.Bodies;
+  var Body      = Matter.Body;
+  var Composite = Matter.Composite;
+
+  var engine = Engine.create({ gravity:{ y: 1.8 } });
+  var world  = engine.world;
+
+  /* 경계벽: 바닥·좌·우 */
+  var ground = Bodies.rectangle(W/2,        H + THICK/2, W + 200, THICK, { isStatic:true, friction:0.65, restitution:0.3 });
+  var wallL  = Bodies.rectangle(-THICK/2,   H/2,         THICK,   H*3,   { isStatic:true, friction:0.4,  restitution:0.2 });
+  var wallR  = Bodies.rectangle(W+THICK/2,  H/2,         THICK,   H*3,   { isStatic:true, friction:0.4,  restitution:0.2 });
+  Composite.add(world, [ground, wallL, wallR]);
+
+  /* 아이콘 바디 + DOM 생성 */
+  var pairs = ICONS.map(function(icon) {
+    var startX = HALF + 20 + Math.random() * (W - ICO - 40);
+    var startY = H - HALF - 10;
+
+    var body = Bodies.rectangle(startX, startY, ICO - 6, ICO - 6, {
+      restitution : 0.22 + Math.random() * 0.42,
+      friction    : 0.25 + Math.random() * 0.5,
+      density     : 0.003 + Math.random() * 0.003,
+      frictionAir : 0.010 + Math.random() * 0.012,
+      chamfer     : { radius: 5 },
+    });
+
+    /* 초기 투척 */
+    Body.setVelocity(body, {
+      x: (Math.random() - 0.5) * 9,
+      y: -(9 + Math.random() * 13),
+    });
+    Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.35);
+    Composite.add(world, body);
+
+    /* DOM */
+    var el = document.createElement('div');
+    el.className = 'phys-icon';
+
+    var img = document.createElement('img');
+    img.alt = icon.label;
+
+    var done = false;
+    function showFallback() {
+      if (done) return; done = true;
+      img.style.display = 'none';
+      el.style.background = icon.bg;
+      var fb = document.createElement('span');
+      fb.style.cssText = 'font-size:' + Math.round(ICO * 0.36) + 'px;font-weight:900;color:' + (icon.color||'#fff') + ';line-height:1;';
+      fb.textContent = icon.label;
+      el.appendChild(fb);
+    }
+    img.onerror = showFallback;
+    var t = setTimeout(showFallback, 2200);
+    img.onload = function() { clearTimeout(t); };
+    img.src = 'https://www.google.com/s2/favicons?domain=' + icon.domain + '&sz=64';
+
+    el.appendChild(img);
+    hero.appendChild(el);
+    return { body: body, el: el };
+  });
+
+  /* Runner */
+  var runner = Runner.create();
+  Runner.run(runner, engine);
+
+  /* RAF 동기화 루프 */
+  var rafId;
+  function sync() {
+    for (var i = 0; i < pairs.length; i++) {
+      var p = pairs[i];
+      var pos = p.body.position;
+      var ang = p.body.angle;
+      p.el.style.left      = (pos.x - HALF) + 'px';
+      p.el.style.top       = (pos.y - HALF) + 'px';
+      p.el.style.transform = 'rotate(' + ang + 'rad)';
+    }
+    rafId = requestAnimationFrame(sync);
+  }
+  sync();
+
+  /* 3초마다 바닥에서 위로 반동 */
+  setInterval(function() {
+    for (var i = 0; i < pairs.length; i++) {
+      var b = pairs[i].body;
+      Body.setVelocity(b, {
+        x: (Math.random() - 0.5) * 7,
+        y: -(10 + Math.random() * 12),
+      });
+      Body.setAngularVelocity(b, (Math.random() - 0.5) * 0.4);
+    }
+  }, 3000);
+
+  /* hero 뷰포트 이탈 시 일시정지 */
+  window.addEventListener('scroll', function() {
+    var r = hero.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > window.innerHeight) {
+      Runner.stop(runner);
+      cancelAnimationFrame(rafId);
+    }
+  }, { passive:true });
+})();
+
+
+/* ── inquiry 섹션 아이콘 물리 낙하 ── */
+(function() {
+  if (typeof Matter === 'undefined') return;
+
+  var ICONS = [
+    { domain:'instagram.com',   label:'IG', bg:'linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)' },
+    { domain:'tiktok.com',      label:'TK', bg:'#010101' },
+    { domain:'kakaocorp.com',   label:'K',  bg:'#FEE500', color:'#391B1B' },
+    { domain:'naver.com',       label:'N',  bg:'#03C75A' },
+    { domain:'musinsa.com',     label:'M',  bg:'#1C1C1C' },
+    { domain:'a-bly.com',       label:'A',  bg:'#FF3478' },
+    { domain:'youtube.com',     label:'▶',  bg:'#FF0000' },
+    { domain:'google.com',      label:'G',  bg:'#fff', color:'#4285F4' },
+    { domain:'pinterest.com',   label:'P',  bg:'#E60023' },
+    { domain:'meta.com',        label:'f',  bg:'#0866FF' },
+    { domain:'kream.co.kr',     label:'KR', bg:'#111' },
+    { domain:'daangn.com',      label:'🥕', bg:'#FF7E36' },
+    { domain:'zigzag.kr',       label:'Z',  bg:'#FF338F' },
+    { domain:'29cm.co.kr',      label:'29', bg:'#222' },
+    { domain:'wconcept.co.kr',  label:'W',  bg:'#000' },
+    { domain:'brandi.co.kr',    label:'B',  bg:'#FF3B77' },
+    { domain:'kakaostyle.com',  label:'KS', bg:'#FFCD00', color:'#391B1B' },
+    { domain:'coupang.com',     label:'CP', bg:'#C5172E' },
+    { domain:'oliveyoung.co.kr',label:'OY', bg:'#007B40' },
+    { domain:'twitter.com',     label:'X',  bg:'#000' },
+  ];
+
+  var sec      = document.getElementById('inquiry');
+  var formCard = document.querySelector('.form-card');
+  if (!sec || !formCard) return;
+
+  var ICO   = window.innerWidth <= 768 ? 36 : 46;
+  var HALF  = ICO / 2;
+  var THICK = 60;
+
+  var Engine    = Matter.Engine;
+  var Runner    = Matter.Runner;
+  var Bodies    = Matter.Bodies;
+  var Body      = Matter.Body;
+  var Composite = Matter.Composite;
+
+  var started = false;
+
+  function launch() {
+    if (started) return;
+    started = true;
+
+    var secRect  = sec.getBoundingClientRect();
+    var cardRect = formCard.getBoundingClientRect();
+    var W  = sec.offsetWidth;
+    var H  = sec.offsetHeight;
+
+    /* form-card 위치 (섹션 로컬 좌표) */
+    var cX = cardRect.left - secRect.left;
+    var cY = cardRect.top  - secRect.top;
+    var cW = cardRect.width;
+    var cH = cardRect.height;
+
+    var engine = Engine.create({ gravity:{ y: 2.0 } });
+    var world  = engine.world;
+
+    /* 경계: 바닥·좌·우 */
+    var ground = Bodies.rectangle(W/2,       H + THICK/2, W + 200, THICK, { isStatic:true, friction:0.6,  restitution:0.28 });
+    var wallL  = Bodies.rectangle(-THICK/2,  H/2,         THICK,   H*3,   { isStatic:true, friction:0.4,  restitution:0.18 });
+    var wallR  = Bodies.rectangle(W+THICK/2, H/2,         THICK,   H*3,   { isStatic:true, friction:0.4,  restitution:0.18 });
+    Composite.add(world, [ground, wallL, wallR]);
+
+    /* form-card 를 정적 충돌체로 등록 */
+    var cardBody = Bodies.rectangle(cX + cW/2, cY + cH/2, cW, cH, {
+      isStatic: true,
+      friction: 0.5,
+      restitution: 0.22,
+      chamfer: { radius: 18 },
+    });
+    Composite.add(world, cardBody);
+
+    /* 아이콘 DOM + 바디 */
+    var pairs = ICONS.map(function(icon, i) {
+      var startX = HALF + 20 + Math.random() * (W - ICO - 40);
+      var startY = -HALF - i * 14;
+
+      var body = Bodies.rectangle(startX, startY, ICO - 6, ICO - 6, {
+        restitution : 0.20 + Math.random() * 0.35,
+        friction    : 0.30 + Math.random() * 0.50,
+        density     : 0.003 + Math.random() * 0.003,
+        frictionAir : 0.008 + Math.random() * 0.010,
+        chamfer     : { radius: 5 },
+      });
+      Body.setVelocity(body, {
+        x: (Math.random() - 0.5) * 4,
+        y: 1 + Math.random() * 2,
+      });
+      Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.2);
+      Composite.add(world, body);
+
+      var el = document.createElement('div');
+      el.className = 'phys-icon phys-icon-inq';
+
+      var img = document.createElement('img');
+      img.alt = icon.label;
+      var done = false;
+      function showFb(ic, elem) {
+        return function() {
+          if (done) return; done = true;
+          img.style.display = 'none';
+          elem.style.background = ic.bg;
+          var fb = document.createElement('span');
+          fb.style.cssText = 'font-size:' + Math.round(ICO * 0.34) + 'px;font-weight:900;color:' + (ic.color||'#fff') + ';line-height:1;';
+          fb.textContent = ic.label;
+          elem.appendChild(fb);
+        };
+      }
+      var fb = showFb(icon, el);
+      img.onerror = fb;
+      var tmr = setTimeout(fb, 2200);
+      img.onload = function() { clearTimeout(tmr); };
+      img.src = 'https://www.google.com/s2/favicons?domain=' + icon.domain + '&sz=64';
+      el.appendChild(img);
+      sec.appendChild(el);
+
+      return { body: body, el: el };
+    });
+
+    var runner = Runner.create();
+    Runner.run(runner, engine);
+
+    (function sync() {
+      for (var i = 0; i < pairs.length; i++) {
+        var p = pairs[i];
+        var pos = p.body.position;
+        var ang = p.body.angle;
+        p.el.style.left      = (pos.x - HALF) + 'px';
+        p.el.style.top       = (pos.y - HALF) + 'px';
+        p.el.style.transform = 'rotate(' + ang + 'rad)';
+      }
+      requestAnimationFrame(sync);
+    })();
+  }
+
+  /* 섹션 진입 시 1회 발동 */
+  new IntersectionObserver(function(entries, obs) {
+    if (entries[0].isIntersecting) {
+      obs.unobserve(sec);
+      requestAnimationFrame(function() { requestAnimationFrame(launch); });
+    }
+  }, { threshold: 0.05 }).observe(sec);
+})();
+
+
+/* ── '서사' 날아와 꽂히기 ── */
+(function() {
+  var el = document.querySelector('.stab-word');
+  if (!el) return;
+  new IntersectionObserver(function(entries, obs) {
+    if (entries[0].isIntersecting) {
+      el.classList.add('stabbed');
+      obs.unobserve(el);
+    }
+  }, { threshold: 0.6 }).observe(el);
+})();
+
+
+/* ── 캐러셀 auto-slide ── */
+(function() {
+  function initCarousel(wrapSel, dotsSel, interval) {
+    var wrap = document.querySelector(wrapSel);
+    var dots = document.querySelectorAll(dotsSel + ' .cdot');
+    if (!wrap || !dots.length) return;
+
+    var items = wrap.children;
+    var total = items.length;
+    var current = 0;
+    var isMobile = function() { return window.innerWidth <= 768; };
+
+    function goTo(idx) {
+      current = (idx + total) % total;
+
+      /* 도트 */
+      dots.forEach(function(d, i) { d.classList.toggle('active', i === current); });
+
+      if (isMobile()) {
+        /* 모바일: 컨테이너 가로 스크롤만 (페이지 세로 이동 없음) */
+        var itemW = items[current].offsetWidth;
+        var gap   = parseInt(getComputedStyle(wrap).gap) || 14;
+        wrap.scrollTo({ left: current * (itemW + gap), behavior: 'smooth' });
+      } else {
+        /* PC: opacity/scale 하이라이트 */
+        Array.from(items).forEach(function(el, i) {
+          el.classList.toggle('car-active', i === current);
+        });
+      }
+    }
+
+    /* 초기 상태 */
+    goTo(0);
+
+    /* 도트 클릭 */
+    dots.forEach(function(d, i) {
+      d.addEventListener('click', function() {
+        clearInterval(timer);
+        goTo(i);
+        timer = setInterval(function() { goTo(current + 1); }, interval);
+      });
+    });
+
+    var timer = setInterval(function() { goTo(current + 1); }, interval);
+  }
+
+  initCarousel('.phones-wrap', '#probDots', 3400);
+  initCarousel('.sol-phones',  '#solDots',  3800);
+})();
+
+
+/* ── Credibility: 50,000,000,000 → 압축 → 500억 (무한 반복) ── */
+(function() {
+  var digitsEl = document.querySelector('.cred-digits');
+  var labelEl  = document.querySelector('.cred-label');
+  var amountEl = document.querySelector('.cred-amount');
+  if (!digitsEl || !labelEl || !amountEl) return;
+
+  var steps    = ['5','50','500','5,000','50,000','500,000','5,000,000','50,000,000','500,000,000','5,000,000,000','50,000,000,000'];
+  var stepMs   = 85;
+  var holdMs   = 700;
+  var squashMs = 380;
+  var labelMs  = 2800; /* 500억 보여주는 시간 */
+
+  /* 스쿼시/점프 CSS 주입 */
+  var style = document.createElement('style');
+  style.textContent =
+    '@keyframes credSquash{' +
+    '  0%  {transform:scaleX(1) scaleY(1);}' +
+    '  28% {transform:scaleX(2.4) scaleY(0.38);}' +
+    '  52% {transform:scaleX(0.65) scaleY(1.38);}' +
+    '  72% {transform:scaleX(1.10) scaleY(0.88);}' +
+    ' 100% {transform:scaleX(1) scaleY(1);}' +
+    '}' +
+    '@keyframes credJump{' +
+    '  0%,70%,100%{transform:translateY(0) scaleY(1);}' +
+    '  20%{transform:translateY(-10px) scaleY(1.12);}' +
+    '  35%{transform:translateY(0) scaleY(.90);}' +
+    '  45%{transform:translateY(-4px) scaleY(1.05);}' +
+    '  55%{transform:translateY(0) scaleY(1);}' +
+    '}' +
+    '.cred-squashing{display:inline-block;transform-origin:center center;animation:credSquash ' + squashMs + 'ms cubic-bezier(.36,.07,.19,.97) forwards;}' +
+    '.cred-label-jump .cjl{display:inline-block;animation:credJump 1.8s cubic-bezier(.36,.07,.19,.97) infinite;transform-origin:bottom center;}';
+  document.head.appendChild(style);
+
+  function applyLabelJump() {
+    labelEl.innerHTML = '';
+    '500억'.split('').forEach(function(ch, i) {
+      var sp = document.createElement('span');
+      sp.className = 'cjl';
+      sp.textContent = ch;
+      sp.style.animationDelay    = (Math.random() * 1.6).toFixed(2) + 's';
+      sp.style.animationDuration = (1.4 + Math.random() * 0.8).toFixed(2) + 's';
+      labelEl.appendChild(sp);
+    });
+    labelEl.classList.add('cred-label-jump');
+  }
+
+  function runCycle() {
+    /* 1. 숫자 롤링 */
+    digitsEl.classList.remove('cred-squashing');
+    digitsEl.style.display = 'inline-block';
+    labelEl.style.display  = 'none';
+    labelEl.classList.remove('cred-label-jump');
+
+    var i = 0;
+    function nextStep() {
+      if (i >= steps.length) {
+        /* 2. 잠깐 유지 */
+        setTimeout(function() {
+          /* 3. 찌그러지며 압축 */
+          digitsEl.classList.add('cred-squashing');
+          setTimeout(function() {
+            /* 4. 500억 표시 + 통통 점프 */
+            digitsEl.style.display = 'none';
+            labelEl.style.display  = 'inline';
+            applyLabelJump();
+            /* 5. 잠깐 후 다시 반복 */
+            setTimeout(runCycle, labelMs);
+          }, squashMs);
+        }, holdMs);
+        return;
+      }
+      digitsEl.textContent = steps[i++];
+      setTimeout(nextStep, stepMs);
+    }
+    nextStep();
+  }
+
+  /* 뷰포트 진입 시 최초 시작, 이후 자동 반복 */
+  var started = false;
+  new IntersectionObserver(function(entries, obs) {
+    if (!entries[0].isIntersecting || started) return;
+    started = true;
+    obs.unobserve(amountEl);
+    runCycle();
+  }, { threshold: 0.4 }).observe(amountEl);
+})();
+
+
+/* ── Form Submit → Slack Webhook ── */
+document.getElementById('inquiryForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var form    = this;
+  var inputs  = form.querySelectorAll('input');
+  var brand   = inputs[0].value;
+  var name    = inputs[1].value;
+  var phone   = inputs[2].value;
+  var email   = inputs[3].value;
+
+  var now = new Date();
+  var kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+  var ts  = kst.getUTCFullYear() + '.' +
+            String(kst.getUTCMonth()+1).padStart(2,'0') + '.' +
+            String(kst.getUTCDate()).padStart(2,'0') + ' ' +
+            String(kst.getUTCHours()).padStart(2,'0') + ':' +
+            String(kst.getUTCMinutes()).padStart(2,'0');
+
+  var payload = {
+    blocks: [
+      {
+        type: 'header',
+        text: { type: 'plain_text', text: '📩 새 상담 문의가 도착했습니다!' }
+      },
+      {
+        type: 'section',
+        fields: [
+          { type: 'mrkdwn', text: '*브랜드명*\n' + brand },
+          { type: 'mrkdwn', text: '*담당자*\n' + name },
+          { type: 'mrkdwn', text: '*연락처*\n' + phone },
+          { type: 'mrkdwn', text: '*이메일*\n' + email }
+        ]
+      },
+      {
+        type: 'context',
+        elements: [{ type: 'mrkdwn', text: '🕐 ' + ts + ' (KST) · 콘텐츠마이닝 랜딩페이지' }]
+      },
+      { type: 'divider' }
+    ]
+  };
+
+  var btn = form.querySelector('.form-submit');
+  btn.textContent = '전송 중...';
+  btn.disabled = true;
+
+  fetch('__SLACK_WEBHOOK_URL__', {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  })
+  .then(function() {
+    form.style.display = 'none';
+    document.getElementById('successBox').style.display = 'block';
+  })
+  .catch(function() {
+    btn.textContent = '전략 논의 신청하기 →';
+    btn.disabled = false;
+    alert('전송 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+  });
+});
+
+
+/* ── 슬롯 업데이트 시간 (현재시각 - 22분, 한국시간, 1분마다 갱신) ── */
+(function() {
+  var el = document.getElementById('slotUpdated');
+  if (!el) return;
+
+  function render() {
+    var now = new Date();
+    var kst = new Date(now.getTime() + 9 * 60 * 60 * 1000 - 22 * 60 * 1000);
+    var h  = kst.getUTCHours();
+    var m  = kst.getUTCMinutes();
+    var ampm = h < 12 ? '오전' : '오후';
+    h = h % 12 || 12;
+    var mm = m < 10 ? '0' + m : '' + m;
+    el.textContent = '방금 ' + ampm + ' ' + h + ':' + mm + ' 에 업데이트됨';
+  }
+
+  render();
+  /* 매 분 정각에 맞춰 갱신 */
+  var now = new Date();
+  var msToNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+  setTimeout(function() {
+    render();
+    setInterval(render, 60000);
+  }, msToNextMinute);
+})();
+
+
+/* ── Nav 스크롤 배경 + 플로팅 버튼 표시 제어 ── */
+(function() {
+  var nav    = document.querySelector('nav');
+  var fab    = document.querySelector('.fab');
+  var hero   = document.querySelector('.hero');
+  var inquiry = document.getElementById('inquiry');
+
+  function update() {
+    /* nav 배경 */
+    if (window.scrollY > 40) {
+      nav.style.background = 'rgba(255,255,255,0.96)';
+      nav.style.boxShadow  = '0 2px 20px rgba(0,0,0,0.07)';
+    } else {
+      nav.style.background = 'rgba(255,255,255,0.88)';
+      nav.style.boxShadow  = 'none';
+    }
+
+    /* fab: hero 영역 벗어났고 inquiry 섹션 아직 안 보일 때만 표시 */
+    var heroBottom    = hero    ? hero.getBoundingClientRect().bottom    : 0;
+    var inquiryTop    = inquiry ? inquiry.getBoundingClientRect().top     : Infinity;
+    var show = heroBottom < 0 && inquiryTop > window.innerHeight;
+    fab.style.opacity         = show ? '1' : '0';
+    fab.style.pointerEvents   = show ? 'auto' : 'none';
+    fab.style.transform       = show ? 'translateY(0)' : 'translateY(12px)';
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+</script>
+
+</body>
+</html>

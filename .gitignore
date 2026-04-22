@@ -1,0 +1,6 @@
+*.pdf
+*.pptx
+*.png
+index copy*.html
+index copy 2*.html
+.env

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- 다크 배경 -->
+  <rect width="32" height="32" rx="7" fill="#111111"/>
+  <!-- 오렌지 세로 바 (hero-chip 디자인 언어) -->
+  <rect x="5" y="7" width="4" height="18" rx="2" fill="#FF6B2C"/>
+  <!-- C (Contents) -->
+  <text
+    x="21" y="22.5"
+    font-family="Arial Black, Arial, sans-serif"
+    font-size="14"
+    font-weight="900"
+    text-anchor="middle"
+    fill="#ffffff"
+    letter-spacing="-0.5"
+  >CM</text>
+</svg>
