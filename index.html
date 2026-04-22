@@ -412,18 +412,15 @@
     }
 
     .hero-platform-tag {
-      position:absolute;
-      bottom:110px;
-      left:50%;
-      transform:translateX(-50%);
-      white-space:nowrap;
-      font-size:26px;
+      display:block;
+      font-size:22px;
       font-weight:900;
       color:rgba(17,17,17,0.65);
       letter-spacing:-.02em;
-      z-index:2;
       pointer-events:none;
       user-select:none;
+      margin-top:28px;
+      text-align:center;
     }
     .hero-platform-tag em {
       font-style:normal;
@@ -431,14 +428,8 @@
     }
     @media (max-width:768px) {
       .hero-platform-tag {
-        position:relative;
-        bottom:auto; left:auto;
-        transform:none;
         font-size:16px;
-        white-space:normal;
-        text-align:center;
-        margin-top:24px;
-        display:block;
+        margin-top:20px;
       }
     }
 
@@ -1023,8 +1014,7 @@
       </h2>
       <p class="cred-desc">
         무신사 입점과 에이블리 광고에 수백만 원을 태우고도<br>
-        ROAS 200%에 허덕이고 있다면,<br>
-        지금부터 3분만 집중해 주세요.
+        ROAS 200%에 허덕이고 있다면,
       </p>
       <p class="cred-highlight">→ 지금부터 3분만 집중해 주세요.</p>
     </div>
@@ -1356,8 +1346,8 @@
       </h2>
       <p class="res-body">
         상상이 아닙니다.<br class="br-pc"> 자사몰 중심의 콘텐츠 마케팅으로 플랫폼 수수료를 아끼고<br class="br-pc">
-        그 비용을 다시 <strong>'전환되는 콘텐츠'</strong>에 투자한 결과입니다.<br class="br-pc">
-        배OO 브랜드: 누적 조회 180만 회<br>
+        그 비용을 다시 <strong>'전환되는 콘텐츠'</strong>에 투자한 결과입니다.<br>
+        <br>배OO 브랜드: 누적 조회 180만 회<br>
         전OO 브랜드: 누적 조회 100만 회
       </p>
       <div class="res-chart-row">
@@ -1986,7 +1976,7 @@
   var amountEl = document.querySelector('.cred-amount');
   if (!digitsEl || !labelEl || !amountEl) return;
 
-  var steps    = ['50,000,000,000','5,000,000,000','500,000,000','50,000,000','5,000,000','500,000','50,000','5,000','500'];
+  var steps    = ['5','50','500','5,000','50,000','500,000','5,000,000','50,000,000','500,000,000','5,000,000,000','50,000,000,000'];
   var stepMs   = 85;
   var holdMs   = 700;
   var squashMs = 380;
