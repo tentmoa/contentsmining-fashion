@@ -431,11 +431,14 @@
     }
     @media (max-width:768px) {
       .hero-platform-tag {
-        font-size:18px;
-        bottom:90px;
+        position:relative;
+        bottom:auto; left:auto;
+        transform:none;
+        font-size:16px;
         white-space:normal;
         text-align:center;
-        width:calc(100% - 48px);
+        margin-top:24px;
+        display:block;
       }
     }
 
@@ -864,7 +867,8 @@
 
     @media (max-width:768px) {
       nav { padding:13px 20px; }
-      .hero { padding:90px 20px 80px; }
+      .hero { padding:80px 20px 200px; align-items:flex-start; }
+      .hero-body { width:100%; }
       .hero-desc { font-size:14px; }
       .hero-stats { border-radius:14px; padding:16px 12px; gap:0; }
       .hero-stat { padding:0 14px; }
@@ -978,10 +982,10 @@
 
     <a href="#inquiry" class="hero-cta">우리 같이 전략 짜볼까요? →</a>
 
-  </div>
+    <div class="hero-platform-tag">
+      플랫폼에 의존하지 말고 <em>'정복'</em>하세요.
+    </div>
 
-  <div class="hero-platform-tag">
-    플랫폼에 의존하지 말고 <em>'정복'</em>하세요.
   </div>
 
   <div class="hero-scroll">
