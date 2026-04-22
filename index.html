@@ -1009,7 +1009,7 @@
     <div class="cred-text">
       <p class="eyebrow">500억 원의 데이터</p>
       <h2 class="cred-title">
-        <em class="cred-amount" id="credAmount"><span class="cred-digits">50,000,000,000</span><span class="cred-label" style="display:none">500억</span> 원</em>을<br>직접 팔아보며<br>찾았습니다.
+        <em class="cred-amount">500억 원</em>을<br>직접 팔아보며<br>찾았습니다.
       </h2>
       <p class="cred-desc">
         무신사 입점과 에이블리 광고에 수백만 원을 태우고도<br>
@@ -1490,87 +1490,6 @@
 })();
 
 
-/* ── Credibility: 50,000,000,000 → 압축 → 500억 (무한 반복) ── */
-(function() {
-  var digitsEl = document.querySelector('.cred-digits');
-  var labelEl  = document.querySelector('.cred-label');
-  var amountEl = document.querySelector('.cred-amount');
-  if (!digitsEl || !labelEl || !amountEl) return;
-
-  var steps    = ['5','50','500','5,000','50,000','500,000','5,000,000','50,000,000','500,000,000','5,000,000,000','50,000,000,000'];
-  var stepMs   = 85;
-  var holdMs   = 700;
-  var squashMs = 380;
-  var labelMs  = 2800; /* 500억 보여주는 시간 */
-
-  /* 스쿼시/점프 CSS 주입 */
-  var style = document.createElement('style');
-  style.textContent =
-    '@keyframes credSquash{' +
-    '  0%  {transform:scaleX(1) scaleY(1);}' +
-    '  28% {transform:scaleX(2.4) scaleY(0.38);}' +
-    '  52% {transform:scaleX(0.65) scaleY(1.38);}' +
-    '  72% {transform:scaleX(1.10) scaleY(0.88);}' +
-    ' 100% {transform:scaleX(1) scaleY(1);}' +
-    '}' +
-    '@keyframes credJump{' +
-    '  0%,70%,100%{transform:translateY(0) scaleY(1);}' +
-    '  20%{transform:translateY(-10px) scaleY(1.12);}' +
-    '  35%{transform:translateY(0) scaleY(.90);}' +
-    '  45%{transform:translateY(-4px) scaleY(1.05);}' +
-    '  55%{transform:translateY(0) scaleY(1);}' +
-    '}' +
-    '.cred-squashing{display:inline-block;transform-origin:center center;animation:credSquash ' + squashMs + 'ms cubic-bezier(.36,.07,.19,.97) forwards;}' +
-    '.cred-label-jump .cjl{display:inline-block;animation:credJump 1.8s cubic-bezier(.36,.07,.19,.97) infinite;transform-origin:bottom center;}';
-  document.head.appendChild(style);
-
-  function applyLabelJump() {
-    labelEl.innerHTML = '';
-    '500억'.split('').forEach(function(ch, i) {
-      var sp = document.createElement('span');
-      sp.className = 'cjl';
-      sp.textContent = ch;
-      sp.style.animationDelay    = (Math.random() * 1.6).toFixed(2) + 's';
-      sp.style.animationDuration = (1.4 + Math.random() * 0.8).toFixed(2) + 's';
-      labelEl.appendChild(sp);
-    });
-    labelEl.classList.add('cred-label-jump');
-  }
-
-  function runCycle() {
-    digitsEl.classList.remove('cred-squashing');
-    digitsEl.style.display = 'inline-block';
-    labelEl.style.display  = 'none';
-    labelEl.classList.remove('cred-label-jump');
-
-    var i = 0;
-    function nextStep() {
-      if (i >= steps.length) {
-        setTimeout(function() {
-          digitsEl.classList.add('cred-squashing');
-          setTimeout(function() {
-            digitsEl.style.display = 'none';
-            labelEl.style.display  = 'inline';
-            applyLabelJump();
-            setTimeout(runCycle, labelMs);
-          }, squashMs);
-        }, holdMs);
-        return;
-      }
-      digitsEl.textContent = steps[i++];
-      setTimeout(nextStep, stepMs);
-    }
-    nextStep();
-  }
-
-  var started = false;
-  new IntersectionObserver(function(entries, obs) {
-    if (!entries[0].isIntersecting || started) return;
-    started = true;
-    obs.unobserve(amountEl);
-    runCycle();
-  }, { threshold: 0.4 }).observe(amountEl);
-})();
 
 
 /* ── Form Submit → Slack Webhook ── */
