@@ -1,6 +1,8 @@
 *.pdf
 *.pptx
 *.png
+!assets/mockup/*.png
+!assets/section-img/*.png
 index copy*.html
 index copy 2*.html
 .env

@@ -141,20 +141,6 @@
 
     /* ── PC 캐러셀 하이라이트 ── */
     @media (min-width: 769px) {
-      .phones-wrap .phone {
-        transition: transform .5s ease, opacity .5s ease, box-shadow .5s ease;
-        opacity: 0.55;
-      }
-      .phones-wrap .phone.car-active {
-        opacity: 1;
-        box-shadow: 0 24px 56px rgba(0,0,0,.24), 0 4px 14px rgba(255,107,44,.18);
-      }
-      .phones-wrap .phone.car-active.phone-up {
-        transform: translateY(-22px) scale(1.04);
-      }
-      .phones-wrap .phone.car-active:not(.phone-up) {
-        transform: scale(1.04);
-      }
       .sol-phones .sol-card {
         transition: transform .5s ease, opacity .5s ease;
         opacity: 0.55;
@@ -212,7 +198,9 @@
       background:var(--orange); color:#fff; border:none;
       padding:11px 24px; border-radius:50px;
       font-family:'Pretendard',sans-serif; font-size:13px; font-weight:700;
-      cursor:pointer; text-decoration:none; transition:all .2s; white-space:nowrap;
+      cursor:pointer; text-decoration:none; white-space:nowrap;
+      transition:opacity .35s ease, transform .35s ease, background .2s;
+      transform-origin:right center;
     }
     .nav-btn:hover { background:#e85a1c; transform:translateY(-1px); }
 
@@ -367,49 +355,6 @@
     }
     .hero-urgency::before { content:'⚡ '; }
 
-    /* ── 광고 매체 아이콘 물리 시뮬레이션 ── */
-    .phys-icon-inq {
-      position:absolute;
-      width:46px; height:46px;
-      border-radius:13px;
-      overflow:hidden;
-      box-shadow:0 5px 20px rgba(0,0,0,.20);
-      pointer-events:none;
-      z-index:10;
-      will-change:transform;
-      background:#fff;
-      display:flex; align-items:center; justify-content:center;
-    }
-    .phys-icon-inq img {
-      width:68%; height:68%;
-      object-fit:contain;
-      display:block;
-    }
-    @media (max-width:768px) {
-      .phys-icon-inq { width:36px; height:36px; border-radius:10px; }
-    }
-
-    .phys-icon {
-      position:absolute;
-      width:60px; height:60px;
-      border-radius:16px;
-      overflow:hidden;
-      box-shadow:0 6px 22px rgba(0,0,0,.24);
-      pointer-events:none;
-      z-index:5;
-      will-change:transform;
-      background:#fff;
-      display:flex; align-items:center; justify-content:center;
-    }
-    .phys-icon img {
-      width:68%; height:68%;
-      object-fit:contain;
-      border-radius:0;
-      display:block;
-    }
-    @media (max-width:768px) {
-      .phys-icon { width:46px; height:46px; border-radius:12px; }
-    }
 
     .hero-platform-tag {
       display:block;
@@ -528,19 +473,43 @@
 
     /* ── 폰 공통 ── */
     .phones-wrap {
-      display:grid; grid-template-columns:repeat(4,1fr); gap:10px; align-items:flex-end;
+      display:flex;
+      overflow-x:scroll;
+      scroll-snap-type:x mandatory;
+      -webkit-overflow-scrolling:touch;
+      scrollbar-width:none;
+      gap:24px;
+      padding:20px 18%;
+      perspective:1200px;
+      -webkit-mask-image:linear-gradient(to right, transparent 0%, black 14%, black 86%, transparent 100%);
+      mask-image:linear-gradient(to right, transparent 0%, black 14%, black 86%, transparent 100%);
     }
-    .phone {
-      background:#f0f0f0; border-radius:32px;
-      padding:7px; position:relative; overflow:hidden;
-      aspect-ratio:9/19;
-      box-shadow:0 20px 48px rgba(0,0,0,.18), 0 4px 12px rgba(0,0,0,.10), inset 0 0 0 1px rgba(0,0,0,.08);
-      border:2px solid #e8e8e8;
+    .phones-wrap::-webkit-scrollbar { display:none; }
+    .prob-item {
+      flex:0 0 64%;
+      scroll-snap-align:center;
+      overflow:hidden;
+      border-radius:28px;
+      transition:transform .6s cubic-bezier(.25,.46,.45,.94), opacity .6s ease;
+      opacity:0.45;
+      transform:scale(0.82) rotateY(20deg);
+      transform-style:preserve-3d;
     }
-    /* 다이나믹 아일랜드 */
-    .phone::before {
-      content:''; position:absolute; top:12px; left:50%; transform:translateX(-50%);
-      width:44px; height:13px; background:#111; border-radius:8px; z-index:10;
+    .prob-item.car-active {
+      opacity:1;
+      transform:scale(1) rotateY(0deg);
+    }
+    .prob-img {
+      width:100%;
+      height:auto;
+      display:block;
+    }
+    .mockup-img {
+      width:100%; height:100%;
+      object-fit:cover;
+      border-radius:inherit;
+      display:block;
+      transform:scale(1.45);
     }
     .phone-inner {
       width:100%; height:100%; border-radius:26px; overflow:hidden; position:relative;
@@ -605,6 +574,7 @@
       transform:rotate(-2deg);
     }
 
+
     /* 2번째, 4번째 폰 살짝 위로 */
     .phone-up { transform:translateY(-22px); }
 
@@ -635,6 +605,7 @@
       display:grid; grid-template-columns:repeat(4,1fr); gap:20px;
     }
     .sol-card { display:flex; flex-direction:column; align-items:center; gap:14px; }
+    .sol-card .mockup-img { border-radius:20px; aspect-ratio:9/19; object-fit:cover; }
     .sol-pill {
       background:var(--orange); color:#fff;
       padding:8px 16px; border-radius:50px;
@@ -686,7 +657,9 @@
       background:#fff; border-radius:16px; padding:24px 20px;
       border:1px solid #eee;
       box-shadow:0 2px 16px rgba(0,0,0,.04);
+      min-height:260px;
     }
+    .line-wrap canvas { width:100% !important; min-height:220px; }
 
     .stats-col { display:flex; flex-direction:column; gap:14px; }
     .stat-card {
@@ -831,10 +804,37 @@
        FOOTER
     ══════════════════════════════════ */
     footer {
-      background:#111; color:#555;
-      padding:52px 60px 40px;
+      background:#111;
+    }
+    .footer-toggle {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:18px 60px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .footer-toggle-label {
+      font-size:11.5px; color:#555; font-weight:500;
+    }
+    .footer-toggle-arrow {
+      font-size:12px; color:#444;
+      transition:transform .3s ease;
+      display:inline-block;
+    }
+    .footer-toggle-arrow { transform:rotate(180deg); }
+    .footer-toggle.open .footer-toggle-arrow { transform:rotate(0deg); }
+    .footer-body {
       display:flex; align-items:flex-start; justify-content:space-between;
       flex-wrap:wrap; gap:28px;
+      padding:0 60px 36px;
+      overflow:hidden;
+      max-height:0;
+      opacity:0;
+      transition:max-height .4s ease, opacity .3s ease, padding .4s ease;
+    }
+    .footer-body.open {
+      max-height:400px;
+      opacity:1;
+      padding:28px 60px 36px;
     }
     .footer-logo { font-size:15px; font-weight:800; color:#fff; margin-bottom:12px; }
     .footer-logo em { color:var(--orange); font-style:normal; }
@@ -842,7 +842,9 @@
     .footer-info span { color:#444; }
     .footer-right { font-size:11.5px; text-align:right; line-height:1.9; color:#444; }
     @media (max-width:768px) {
-      footer { padding:40px 20px 32px; }
+      .footer-toggle { padding:16px 20px; }
+      .footer-body { padding:0 20px 0; }
+      .footer-body.open { padding:20px 20px 28px; }
       .footer-right { text-align:left; }
     }
 
@@ -876,7 +878,7 @@
 
     @media (max-width:768px) {
       nav { padding:13px 20px; }
-      .hero { padding:80px 20px 120px; align-items:flex-start; }
+      .hero { padding:80px 20px 120px;}
       .hero-body { width:100%; }
       .hero-desc { font-size:14px; }
       .hero-stats { border-radius:14px; padding:16px 12px; gap:0; }
@@ -895,24 +897,21 @@
 
       /* ── 모바일 폰 캐러셀 ── */
       .phones-wrap {
-        display:flex !important;
-        grid-template-columns:unset !important;
-        overflow-x:scroll;
-        scroll-snap-type:x mandatory;
-        -webkit-overflow-scrolling:touch;
-        gap:14px;
-        padding:8px 20px 28px;
-        scrollbar-width:none;
-        /* 첫 번째 카드 중앙 정렬을 위한 scroll-padding */
-        scroll-padding-left:20px;
+        gap:0;
+        padding:8px 0 28px;
+        -webkit-mask-image:none;
+        mask-image:none;
       }
-      .phones-wrap::-webkit-scrollbar { display:none; }
-      .phones-wrap .phone {
-        scroll-snap-align:center;
-        flex:0 0 68%;
-        aspect-ratio:9/19;
+      .prob-item {
+        flex:0 0 100%;
+        transform:none;
+        opacity:1;
+        border-radius:20px;
       }
-      .phones-wrap .phone-up { transform:translateY(0) !important; }
+      .prob-item.car-active {
+        transform:none;
+        opacity:1;
+      }
 
       .sol-phones {
         display:flex !important;
@@ -936,7 +935,7 @@
     @media (max-width:480px) {
       .hero-stats { flex-direction:column; gap:12px; }
       .hero-stat + .hero-stat { border-left:none; border-top:1px solid rgba(0,0,0,.07); padding-top:12px; }
-      .phones-wrap .phone { flex:0 0 74%; }
+      .prob-item { flex:0 0 74%; }
       .sol-phones .sol-card { flex:0 0 74%; }
     }
   </style>
@@ -1049,126 +1048,10 @@
     </div>
 
     <div class="phones-wrap">
-
-      <!-- Phone 1 : 드라마틱 편집 사진 -->
-      <div class="phone">
-        <div class="phone-inner">
-          <div class="phone-img-wrap">
-            <img
-              src="https://images.unsplash.com/photo-1524407806690-2b914a741648?w=360&h=660&fit=crop&crop=faces,top&q=82"
-              alt="패션 콘텐츠" loading="lazy">
-            <div class="phone-ui">
-              <div class="phone-actions">
-                <div class="phone-action-btn">
-                  <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                  <span>3.2만</span>
-                </div>
-                <div class="phone-action-btn">
-                  <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-                  <span>847</span>
-                </div>
-                <div class="phone-action-btn">
-                  <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
-                  <span>공유</span>
-                </div>
-              </div>
-              <div class="phone-bottom">
-                <div class="phone-user">@kstyle_daily</div>
-                <div class="phone-caption">오늘의 무드 🖤 #패션 #OOTD #daily</div>
-                <div class="phone-progress"><div class="phone-progress-fill" style="width:38%"></div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Phone 2 (raised) : what i'm wearing today -->
-      <div class="phone phone-up">
-        <div class="phone-inner">
-          <div class="phone-img-wrap">
-            <img
-              src="https://images.unsplash.com/photo-1541823709867-1b206113eafd?w=360&h=660&fit=crop&crop=faces,center&q=82"
-              alt="패션 콘텐츠" loading="lazy">
-            <div class="phone-sticker" style="top:28%;left:8%;transform:rotate(-3deg);">
-              what i'm<br>wearing today ✨
-            </div>
-            <div class="phone-ui">
-              <div class="phone-actions">
-                <div class="phone-action-btn">
-                  <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                  <span>5.8만</span>
-                </div>
-                <div class="phone-action-btn">
-                  <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-                  <span>1.2천</span>
-                </div>
-              </div>
-              <div class="phone-bottom">
-                <div class="phone-user">@outfit_inspo</div>
-                <div class="phone-caption">요즘 제 최애 코트 💕 어디서 샀냐고요?</div>
-                <div class="phone-progress"><div class="phone-progress-fill" style="width:62%"></div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Phone 3 : 캐주얼 스트리트 -->
-      <div class="phone">
-        <div class="phone-inner">
-          <div class="phone-img-wrap">
-            <img
-              src="https://images.unsplash.com/photo-1568183190974-3c36dc95f843?w=360&h=660&fit=crop&crop=faces,center&q=82"
-              alt="패션 콘텐츠" loading="lazy">
-            <div class="phone-ui">
-              <div class="phone-actions">
-                <div class="phone-action-btn">
-                  <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                  <span>1.1만</span>
-                </div>
-                <div class="phone-action-btn">
-                  <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-                  <span>293</span>
-                </div>
-              </div>
-              <div class="phone-bottom">
-                <div class="phone-user">@street_looks</div>
-                <div class="phone-caption">오버사이즈 무드 🧥 #streetwear</div>
-                <div class="phone-progress"><div class="phone-progress-fill" style="width:55%"></div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Phone 4 (raised) : 컬러풀 숏폼 -->
-      <div class="phone phone-up">
-        <div class="phone-inner">
-          <div class="phone-img-wrap">
-            <img
-              src="https://images.unsplash.com/photo-1716657908147-b2652fc50f52?w=360&h=660&fit=crop&crop=faces,top&q=82"
-              alt="패션 콘텐츠" loading="lazy">
-            <div class="phone-ui">
-              <div class="phone-actions">
-                <div class="phone-action-btn">
-                  <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                  <span>2.4만</span>
-                </div>
-                <div class="phone-action-btn">
-                  <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-                  <span>716</span>
-                </div>
-              </div>
-              <div class="phone-bottom">
-                <div class="phone-user">@hat.fashion</div>
-                <div class="phone-caption">이 모자 하나로 완성 🧢 #캐주얼룩</div>
-                <div class="phone-progress"><div class="phone-progress-fill" style="width:78%"></div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <div class="prob-item"><img src="assets/section-img/1.png" alt="패션 콘텐츠" loading="lazy" class="prob-img"></div>
+      <div class="prob-item"><img src="assets/section-img/2.png" alt="패션 콘텐츠" loading="lazy" class="prob-img"></div>
+      <div class="prob-item"><img src="assets/section-img/3.png" alt="패션 콘텐츠" loading="lazy" class="prob-img"></div>
+      <div class="prob-item"><img src="assets/section-img/4.png" alt="패션 콘텐츠" loading="lazy" class="prob-img"></div>
     </div>
     <div class="carousel-dots" id="probDots">
       <span class="cdot active"></span>
@@ -1186,7 +1069,7 @@
     <p class="sol-caption">상세페이지에 수백만 원 쓰지 마세요.</p>
     <h2 class="sol-title">
       고객이 브랜드를 기억하는 시간은<br class="br-pc">
-      <em class="blink-text">단 5초</em> — 그 안에 서사가 없으면 이탈합니다.
+      <em class="blink-text">단 5초</em> 그 안에 서사가 없으면 이탈합니다.
     </h2>
     <p class="sol-body">
       고객은 상세페이지를 보기도 전에 광고에서 나갑니다.<br>
@@ -1197,135 +1080,31 @@
 
     <div class="sol-phones">
 
-      <!-- S1 : 배꼽에 어울리는 코디 -->
+      <!-- S1 -->
       <div class="sol-card">
         <div class="sol-pill">배꼽에 어울리는 코디</div>
-        <div class="sol-phone">
-          <div class="sol-phone-inner">
-            <div class="phone-img-wrap">
-              <img
-                src="https://images.unsplash.com/photo-1632765907296-92b2154d3704?w=360&h=660&fit=crop&crop=faces,center&q=82"
-                alt="배꼽에 어울리는 코디" loading="lazy">
-              <div class="phone-sticker" style="top:30%;left:6%;">Today's<br>backpack look 🎒</div>
-              <div class="phone-ui">
-                <div class="phone-actions">
-                  <div class="phone-action-btn">
-                    <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                    <span>4.7만</span>
-                  </div>
-                  <div class="phone-action-btn">
-                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-                    <span>1.8천</span>
-                  </div>
-                </div>
-                <div class="phone-bottom">
-                  <div class="phone-user">@contentsm_official</div>
-                  <div class="phone-caption">배꼽라인 살리는 코디 조합 공개 👀</div>
-                  <div class="phone-progress"><div class="phone-progress-fill" style="width:45%"></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <img src="assets/mockup/5.png" alt="배꼽에 어울리는 코디" loading="lazy" class="mockup-img">
       </div>
 
-      <!-- S2 : 스타일을 살리는 아이템 -->
+      <!-- S2 -->
       <div class="sol-card">
         <div class="sol-pill">스타일을 살리는 아이템</div>
-        <div class="sol-phone">
-          <div class="sol-phone-inner">
-            <div class="phone-img-wrap">
-              <img
-                src="https://images.unsplash.com/photo-1643616955173-1c5af154060e?w=360&h=660&fit=crop&crop=faces,center&q=82"
-                alt="스타일을 살리는 아이템" loading="lazy">
-              <div class="phone-ui">
-                <div class="phone-actions">
-                  <div class="phone-action-btn">
-                    <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                    <span>8.3만</span>
-                  </div>
-                  <div class="phone-action-btn">
-                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-                    <span>2.4천</span>
-                  </div>
-                </div>
-                <div class="phone-bottom">
-                  <div class="phone-user">@contentsm_official</div>
-                  <div class="phone-caption">이 아이템 하나면 스타일 완성 🖤 #모노톤</div>
-                  <div class="phone-progress"><div class="phone-progress-fill" style="width:58%"></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <img src="assets/mockup/6.png" alt="스타일을 살리는 아이템" loading="lazy" class="mockup-img">
       </div>
 
-      <!-- S3 : 얼굴이 작아보이는 코디 -->
+      <!-- S3 -->
       <div class="sol-card">
         <div class="sol-pill">얼굴이 작아보이는 코디</div>
-        <div class="sol-phone">
-          <div class="sol-phone-inner">
-            <div class="phone-img-wrap">
-              <img
-                src="https://images.unsplash.com/photo-1737139355588-b5656b8c7379?w=360&h=660&fit=crop&crop=faces,top&q=82"
-                alt="얼굴이 작아보이는 코디" loading="lazy">
-              <div class="phone-sticker" style="bottom:28%;left:6%;transform:rotate(1deg);">
-                "얼굴 진짜 작아보여요~" 👏
-              </div>
-              <div class="phone-ui">
-                <div class="phone-actions">
-                  <div class="phone-action-btn">
-                    <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                    <span>6.1만</span>
-                  </div>
-                  <div class="phone-action-btn">
-                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-                    <span>2.0천</span>
-                  </div>
-                </div>
-                <div class="phone-bottom">
-                  <div class="phone-user">@contentsm_official</div>
-                  <div class="phone-caption">얼굴 작아보이는 후드 매칭법 🤍 #패션팁</div>
-                  <div class="phone-progress"><div class="phone-progress-fill" style="width:71%"></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <img src="assets/mockup/7.png" alt="얼굴이 작아보이는 코디" loading="lazy" class="mockup-img">
       </div>
 
-      <!-- S4 : 단점을 보완해주는 아이템 -->
+      <!-- S4 -->
       <div class="sol-card">
         <div class="sol-pill">단점을 보완해주는 아이템</div>
-        <div class="sol-phone">
-          <div class="sol-phone-inner">
-            <div class="phone-img-wrap">
-              <img
-                src="https://images.unsplash.com/photo-1635353866477-f77a828b431a?w=360&h=660&fit=crop&crop=faces,center&q=82"
-                alt="단점을 보완해주는 아이템" loading="lazy">
-              <div class="phone-ui">
-                <div class="phone-actions">
-                  <div class="phone-action-btn">
-                    <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                    <span>5.5만</span>
-                  </div>
-                  <div class="phone-action-btn">
-                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-                    <span>1.6천</span>
-                  </div>
-                </div>
-                <div class="phone-bottom">
-                  <div class="phone-user">@contentsm_official</div>
-                  <div class="phone-caption">단점 커버하는 레이어드 룩 ✨ #체형커버</div>
-                  <div class="phone-progress"><div class="phone-progress-fill" style="width:83%"></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <img src="assets/mockup/8.png" alt="단점을 보완해주는 아이템" loading="lazy" class="mockup-img">
       </div>
 
-    </div>
+        </div>
     <div class="carousel-dots" id="solDots">
       <span class="cdot active"></span>
       <span class="cdot"></span>
@@ -1410,7 +1189,6 @@
     <p class="cta-sub">
       브랜드의 가치를 깊이 파악하기 위해 한 달에 5곳의 패션 파트너사만 선정합니다.
       <br class="br-pc">현재 <strong>2곳의 자리</strong>가 남아 있습니다.
-      <span class="slot-updated"><span class="slot-live-dot"></span><span id="slotUpdated"></span></span>
     </p>
 
     <div class="form-card">
@@ -1462,19 +1240,24 @@
 
 <!-- ═══ FOOTER ═══ -->
 <footer>
-  <div>
-    <div class="footer-logo">패션마케팅<em>만</em><span style="color:#aaa">합니다</span></div>
-    <div class="footer-info">
-      <p><span>상호명</span> 유한회사 콘텐츠마이닝</p>
-      <p><span>대표자</span> 박남준</p>
-      <p><span>사업자등록번호</span> 541-88-03700</p>
-      <p><span>사업장주소</span> 서울특별시 강남구 테헤란로 70길 12, 402-643 에이호(대치동)</p>
-      <p><span>고객센터</span> 0505-306-7777</p>
-    </div>
+  <div class="footer-toggle" id="footerToggle">
+    <span class="footer-toggle-label">© 2026 콘텐츠마이닝. All rights reserved.</span>
+    <span class="footer-toggle-arrow">▲</span>
   </div>
-  <div class="footer-right">
-    <p>© 2026 콘텐츠마이닝. All rights reserved.</p>
-    <p style="margin-top:4px;color:#555;">패션 브랜드를 위한 데이터 기반 콘텐츠 마케팅</p>
+  <div class="footer-body" id="footerBody">
+    <div>
+      <div class="footer-logo">패션마케팅<em>만</em><span style="color:#aaa">합니다</span></div>
+      <div class="footer-info">
+        <p><span>상호명</span> 유한회사 콘텐츠마이닝</p>
+        <p><span>대표자</span> 박남준</p>
+        <p><span>사업자등록번호</span> 541-88-03700</p>
+        <p><span>사업장주소</span> 서울특별시 강남구 테헤란로 70길 12, 402-643 에이호(대치동)</p>
+        <p><span>고객센터</span> 0505-306-7777</p>
+      </div>
+    </div>
+    <div class="footer-right">
+      <p style="color:#555;">패션 브랜드를 위한 데이터 기반 콘텐츠 마케팅</p>
+    </div>
   </div>
 </footer>
 
@@ -1524,23 +1307,35 @@
 
 /* ── Line Chart (Results) — 뷰포트 진입 시 선이 그려짐 ── */
 (function() {
-  var ctx = document.getElementById('lineChart').getContext('2d');
-  var grad = ctx.createLinearGradient(0,0,0,280);
-  grad.addColorStop(0,'rgba(255,107,44,0.28)');
-  grad.addColorStop(1,'rgba(255,107,44,0.00)');
+  var canvas = document.getElementById('lineChart');
+  var ctx = canvas.getContext('2d');
 
   var realData = [0, 800, 3200, 3200, 3800, 4500, 6200, 7400, 8031];
   var totalDur = 2000;
   var delay    = totalDur / realData.length;
 
+  /* gradient 동적 생성 플러그인 — 리사이즈마다 재계산 */
+  var gradientPlugin = {
+    id: 'dynamicGradient',
+    beforeDraw: function(chart) {
+      var area = chart.chartArea;
+      if (!area) return;
+      var g = chart.ctx.createLinearGradient(0, area.top, 0, area.bottom);
+      g.addColorStop(0, 'rgba(255,107,44,0.28)');
+      g.addColorStop(1, 'rgba(255,107,44,0.00)');
+      chart.data.datasets[0].backgroundColor = g;
+    }
+  };
+
   var lineChart = new Chart(ctx, {
     type:'line',
+    plugins:[gradientPlugin],
     data:{
       labels:['01/12','01/15','01/18','01/19','01/22','01/25','01/26','01/28','01/30'],
       datasets:[{
-        data: realData.map(function() { return 0; }), /* 0에서 시작 */
+        data: realData.map(function() { return 0; }),
         borderColor:'#FF6B2C',
-        backgroundColor: grad,
+        backgroundColor:'transparent',
         borderWidth:2.5,
         pointBackgroundColor:'#FF6B2C',
         pointBorderColor:'#fff',
@@ -1552,6 +1347,7 @@
     },
     options:{
       responsive:true,
+      maintainAspectRatio:false,
       animation:{
         x:{ type:'number', easing:'linear', duration: delay,
           from: NaN,
@@ -1593,7 +1389,11 @@
           grid:{color:'rgba(0,0,0,0.05)'}, border:{display:false}
         },
         x:{
-          ticks:{font:{family:'Pretendard',size:10}, color:'#bbb'},
+          ticks:{
+            font:{family:'Pretendard',size:10}, color:'#bbb',
+            maxTicksLimit: window.innerWidth < 768 ? 5 : 9,
+            maxRotation:0, minRotation:0
+          },
           grid:{display:false}, border:{display:false}
         }
       }
@@ -1608,7 +1408,8 @@
     obs.disconnect();
     lineChart.data.datasets[0].data = realData;
     lineChart.update();
-  }, { threshold: 0.35 }).observe(document.getElementById('lineChart'));
+  }, { threshold: 0.35 }).observe(canvas);
+
 })();
 
 
@@ -1627,292 +1428,6 @@
 })();
 
 
-/* ── 광고 매체 아이콘 Matter.js 물리 시뮬레이션 ── */
-(function() {
-  if (typeof Matter === 'undefined') return;
-
-  var ICONS = [
-    { domain:'instagram.com',  label:'IG', bg:'linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)' },
-    { domain:'tiktok.com',     label:'TK', bg:'#010101' },
-    { domain:'kakaocorp.com',  label:'K',  bg:'#FEE500', color:'#391B1B' },
-    { domain:'naver.com',      label:'N',  bg:'#03C75A' },
-    { domain:'musinsa.com',    label:'M',  bg:'#1C1C1C' },
-    { domain:'a-bly.com',      label:'A',  bg:'#FF3478' },
-    { domain:'youtube.com',    label:'▶',  bg:'#FF0000' },
-    { domain:'google.com',     label:'G',  bg:'#fff', color:'#4285F4' },
-    { domain:'pinterest.com',  label:'P',  bg:'#E60023' },
-    { domain:'meta.com',       label:'f',  bg:'#0866FF' },
-    { domain:'kream.co.kr',    label:'KR', bg:'#111' },
-    { domain:'daangn.com',     label:'🥕', bg:'#FF7E36' },
-    { domain:'zigzag.kr',      label:'Z',  bg:'#FF338F' },
-    { domain:'29cm.co.kr',     label:'29', bg:'#222' },
-    { domain:'wconcept.co.kr', label:'W',  bg:'#000', noFavicon:true },
-    { domain:'brandi.co.kr',   label:'B',  bg:'#FF3B77' },
-    { domain:'kakaostyle.com', label:'KS', bg:'#FFCD00', color:'#391B1B' },
-    { domain:'coupang.com',    label:'CP', bg:'#C5172E' },
-    { domain:'oliveyoung.co.kr',label:'OY',bg:'#007B40' },
-    { domain:'twitter.com',    label:'X',  bg:'#000', noFavicon:true },
-  ];
-
-  var hero = document.querySelector('.hero');
-  if (!hero) return;
-
-  var ICO   = window.innerWidth <= 768 ? 46 : 60;
-  var HALF  = ICO / 2;
-  var THICK = 60;
-  var W     = hero.offsetWidth;
-  var H     = hero.offsetHeight;
-
-  var Engine    = Matter.Engine;
-  var Runner    = Matter.Runner;
-  var Bodies    = Matter.Bodies;
-  var Body      = Matter.Body;
-  var Composite = Matter.Composite;
-
-  var engine = Engine.create({ gravity:{ y: 1.8 } });
-  var world  = engine.world;
-
-  /* 경계벽: 바닥·좌·우 */
-  var ground = Bodies.rectangle(W/2,        H + THICK/2, W + 200, THICK, { isStatic:true, friction:0.65, restitution:0.3 });
-  var wallL  = Bodies.rectangle(-THICK/2,   H/2,         THICK,   H*3,   { isStatic:true, friction:0.4,  restitution:0.2 });
-  var wallR  = Bodies.rectangle(W+THICK/2,  H/2,         THICK,   H*3,   { isStatic:true, friction:0.4,  restitution:0.2 });
-  Composite.add(world, [ground, wallL, wallR]);
-
-  /* 아이콘 바디 + DOM 생성 */
-  var pairs = ICONS.map(function(icon) {
-    var startX = HALF + 20 + Math.random() * (W - ICO - 40);
-    var startY = H - HALF - 10;
-
-    var body = Bodies.rectangle(startX, startY, ICO - 6, ICO - 6, {
-      restitution : 0.22 + Math.random() * 0.42,
-      friction    : 0.25 + Math.random() * 0.5,
-      density     : 0.003 + Math.random() * 0.003,
-      frictionAir : 0.010 + Math.random() * 0.012,
-      chamfer     : { radius: 5 },
-    });
-
-    /* 초기 투척 */
-    Body.setVelocity(body, {
-      x: (Math.random() - 0.5) * 9,
-      y: -(9 + Math.random() * 13),
-    });
-    Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.35);
-    Composite.add(world, body);
-
-    /* DOM */
-    var el = document.createElement('div');
-    el.className = 'phys-icon';
-
-    var img = document.createElement('img');
-    img.alt = icon.label;
-
-    var done = false;
-    function showFallback() {
-      if (done) return; done = true;
-      img.style.display = 'none';
-      el.style.background = icon.bg;
-      var fb = document.createElement('span');
-      fb.style.cssText = 'font-size:' + Math.round(ICO * 0.36) + 'px;font-weight:900;color:' + (icon.color||'#fff') + ';line-height:1;';
-      fb.textContent = icon.label;
-      el.appendChild(fb);
-    }
-    if (icon.noFavicon) {
-      showFallback();
-    } else {
-      img.onerror = showFallback;
-      var t = setTimeout(showFallback, 2200);
-      img.onload = function() { clearTimeout(t); };
-      img.src = 'https://www.google.com/s2/favicons?domain=' + icon.domain + '&sz=128';
-    }
-
-    el.appendChild(img);
-    hero.appendChild(el);
-    return { body: body, el: el };
-  });
-
-  /* Runner */
-  var runner = Runner.create();
-  Runner.run(runner, engine);
-
-  /* RAF 동기화 루프 */
-  var rafId;
-  function sync() {
-    for (var i = 0; i < pairs.length; i++) {
-      var p = pairs[i];
-      var pos = p.body.position;
-      var ang = p.body.angle;
-      p.el.style.left      = (pos.x - HALF) + 'px';
-      p.el.style.top       = (pos.y - HALF) + 'px';
-      p.el.style.transform = 'rotate(' + ang + 'rad)';
-    }
-    rafId = requestAnimationFrame(sync);
-  }
-  sync();
-
-  /* hero 뷰포트 이탈 시 일시정지 */
-  window.addEventListener('scroll', function() {
-    var r = hero.getBoundingClientRect();
-    if (r.bottom < 0 || r.top > window.innerHeight) {
-      Runner.stop(runner);
-      cancelAnimationFrame(rafId);
-    }
-  }, { passive:true });
-})();
-
-
-/* ── inquiry 섹션 아이콘 물리 낙하 ── */
-(function() {
-  if (typeof Matter === 'undefined') return;
-
-  var ICONS = [
-    { domain:'instagram.com',   label:'IG', bg:'linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)' },
-    { domain:'tiktok.com',      label:'TK', bg:'#010101', noFavicon:true },
-    { domain:'kakaocorp.com',   label:'K',  bg:'#FEE500', color:'#391B1B' },
-    { domain:'naver.com',       label:'N',  bg:'#03C75A' },
-    { domain:'musinsa.com',     label:'M',  bg:'#111' },
-    { domain:'a-bly.com',       label:'A',  bg:'#FF3478' },
-    { domain:'youtube.com',     label:'▶',  bg:'#FF0000' },
-    { domain:'google.com',      label:'G',  bg:'#fff', color:'#4285F4' },
-    { domain:'pinterest.com',   label:'P',  bg:'#E60023' },
-    { domain:'meta.com',        label:'f',  bg:'#0866FF' },
-    { domain:'kream.co.kr',     label:'KR', bg:'#111' },
-    { domain:'daangn.com',      label:'🥕', bg:'#FF7E36' },
-    { domain:'zigzag.kr',       label:'Z',  bg:'#FF338F' },
-    { domain:'29cm.co.kr',      label:'29', bg:'#111' },
-    { domain:'wconcept.co.kr',  label:'W',  bg:'#000' },
-    { domain:'brandi.co.kr',    label:'B',  bg:'#111' },
-    { domain:'kakaostyle.com',  label:'KS', bg:'#FFCD00', color:'#391B1B' },
-    { domain:'coupang.com',     label:'CP', bg:'#C5172E' },
-    { domain:'oliveyoung.co.kr',label:'OY', bg:'#007B40' },
-    { domain:'twitter.com',     label:'X',  bg:'#000' },
-  ];
-
-  var sec      = document.getElementById('inquiry');
-  var formCard = document.querySelector('.form-card');
-  if (!sec || !formCard) return;
-
-  var ICO   = window.innerWidth <= 768 ? 36 : 46;
-  var HALF  = ICO / 2;
-  var THICK = 60;
-
-  var Engine    = Matter.Engine;
-  var Runner    = Matter.Runner;
-  var Bodies    = Matter.Bodies;
-  var Body      = Matter.Body;
-  var Composite = Matter.Composite;
-
-  var started = false;
-
-  function launch() {
-    if (started) return;
-    started = true;
-
-    var secRect  = sec.getBoundingClientRect();
-    var cardRect = formCard.getBoundingClientRect();
-    var W  = sec.offsetWidth;
-    var H  = sec.offsetHeight;
-
-    /* form-card 위치 (섹션 로컬 좌표) */
-    var cX = cardRect.left - secRect.left;
-    var cY = cardRect.top  - secRect.top;
-    var cW = cardRect.width;
-    var cH = cardRect.height;
-
-    var engine = Engine.create({ gravity:{ y: 2.0 } });
-    var world  = engine.world;
-
-    /* 경계: 바닥·좌·우 */
-    var ground = Bodies.rectangle(W/2,       H + THICK/2, W + 200, THICK, { isStatic:true, friction:0.6,  restitution:0.28 });
-    var wallL  = Bodies.rectangle(-THICK/2,  H/2,         THICK,   H*3,   { isStatic:true, friction:0.4,  restitution:0.18 });
-    var wallR  = Bodies.rectangle(W+THICK/2, H/2,         THICK,   H*3,   { isStatic:true, friction:0.4,  restitution:0.18 });
-    Composite.add(world, [ground, wallL, wallR]);
-
-    /* form-card 를 정적 충돌체로 등록 */
-    var cardBody = Bodies.rectangle(cX + cW/2, cY + cH/2, cW, cH, {
-      isStatic: true,
-      friction: 0.5,
-      restitution: 0.22,
-      chamfer: { radius: 18 },
-    });
-    Composite.add(world, cardBody);
-
-    /* 아이콘 DOM + 바디 */
-    var pairs = ICONS.map(function(icon, i) {
-      var startX = HALF + 20 + Math.random() * (W - ICO - 40);
-      var startY = -HALF - i * 14;
-
-      var body = Bodies.rectangle(startX, startY, ICO - 6, ICO - 6, {
-        restitution : 0.20 + Math.random() * 0.35,
-        friction    : 0.30 + Math.random() * 0.50,
-        density     : 0.003 + Math.random() * 0.003,
-        frictionAir : 0.008 + Math.random() * 0.010,
-        chamfer     : { radius: 5 },
-      });
-      Body.setVelocity(body, {
-        x: (Math.random() - 0.5) * 4,
-        y: 1 + Math.random() * 2,
-      });
-      Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.2);
-      Composite.add(world, body);
-
-      var el = document.createElement('div');
-      el.className = 'phys-icon phys-icon-inq';
-
-      var img = document.createElement('img');
-      img.alt = icon.label;
-      var done = false;
-      function showFb(ic, elem) {
-        return function() {
-          if (done) return; done = true;
-          img.style.display = 'none';
-          elem.style.background = ic.bg;
-          var fb = document.createElement('span');
-          fb.style.cssText = 'font-size:' + Math.round(ICO * 0.34) + 'px;font-weight:900;color:' + (ic.color||'#fff') + ';line-height:1;';
-          fb.textContent = ic.label;
-          elem.appendChild(fb);
-        };
-      }
-      var fb = showFb(icon, el);
-      if (icon.noFavicon) {
-        fb();
-      } else {
-        img.onerror = fb;
-        var tmr = setTimeout(fb, 2200);
-        img.onload = function() { clearTimeout(tmr); };
-        img.src = 'https://www.google.com/s2/favicons?domain=' + icon.domain + '&sz=128';
-      }
-      el.appendChild(img);
-      sec.appendChild(el);
-
-      return { body: body, el: el };
-    });
-
-    var runner = Runner.create();
-    Runner.run(runner, engine);
-
-    (function sync() {
-      for (var i = 0; i < pairs.length; i++) {
-        var p = pairs[i];
-        var pos = p.body.position;
-        var ang = p.body.angle;
-        p.el.style.left      = (pos.x - HALF) + 'px';
-        p.el.style.top       = (pos.y - HALF) + 'px';
-        p.el.style.transform = 'rotate(' + ang + 'rad)';
-      }
-      requestAnimationFrame(sync);
-    })();
-  }
-
-  /* 섹션 진입 시 1회 발동 */
-  new IntersectionObserver(function(entries, obs) {
-    if (entries[0].isIntersecting) {
-      obs.unobserve(sec);
-      requestAnimationFrame(function() { requestAnimationFrame(launch); });
-    }
-  }, { threshold: 0.05 }).observe(sec);
-})();
-
-
 /* ── '서사' 날아와 꽂히기 ── */
 (function() {
   var el = document.querySelector('.stab-word');
@@ -1928,7 +1443,7 @@
 
 /* ── 캐러셀 auto-slide ── */
 (function() {
-  function initCarousel(wrapSel, dotsSel, interval) {
+  function initCarousel(wrapSel, dotsSel, interval, alwaysScroll) {
     var wrap = document.querySelector(wrapSel);
     var dots = document.querySelectorAll(dotsSel + ' .cdot');
     if (!wrap || !dots.length) return;
@@ -1944,23 +1459,21 @@
       /* 도트 */
       dots.forEach(function(d, i) { d.classList.toggle('active', i === current); });
 
-      if (isMobile()) {
-        /* 모바일: 컨테이너 가로 스크롤만 (페이지 세로 이동 없음) */
+      /* car-active (3D 회전 효과) */
+      Array.from(items).forEach(function(el, i) {
+        el.classList.toggle('car-active', i === current);
+      });
+
+      /* 스크롤 */
+      if (alwaysScroll || isMobile()) {
         var itemW = items[current].offsetWidth;
         var gap   = parseInt(getComputedStyle(wrap).gap) || 14;
         wrap.scrollTo({ left: current * (itemW + gap), behavior: 'smooth' });
-      } else {
-        /* PC: opacity/scale 하이라이트 */
-        Array.from(items).forEach(function(el, i) {
-          el.classList.toggle('car-active', i === current);
-        });
       }
     }
 
-    /* 초기 상태 */
     goTo(0);
 
-    /* 도트 클릭 */
     dots.forEach(function(d, i) {
       d.addEventListener('click', function() {
         clearInterval(timer);
@@ -1972,8 +1485,8 @@
     var timer = setInterval(function() { goTo(current + 1); }, interval);
   }
 
-  initCarousel('.phones-wrap', '#probDots', 3400);
-  initCarousel('.sol-phones',  '#solDots',  3800);
+  initCarousel('.phones-wrap', '#probDots', 3400, true);
+  initCarousel('.sol-phones',  '#solDots',  3800, false);
 })();
 
 
@@ -2025,7 +1538,6 @@
   }
 
   function runCycle() {
-    /* 1. 숫자 롤링 */
     digitsEl.classList.remove('cred-squashing');
     digitsEl.style.display = 'inline-block';
     labelEl.style.display  = 'none';
@@ -2034,16 +1546,12 @@
     var i = 0;
     function nextStep() {
       if (i >= steps.length) {
-        /* 2. 잠깐 유지 */
         setTimeout(function() {
-          /* 3. 찌그러지며 압축 */
           digitsEl.classList.add('cred-squashing');
           setTimeout(function() {
-            /* 4. 500억 표시 + 통통 점프 */
             digitsEl.style.display = 'none';
             labelEl.style.display  = 'inline';
             applyLabelJump();
-            /* 5. 잠깐 후 다시 반복 */
             setTimeout(runCycle, labelMs);
           }, squashMs);
         }, holdMs);
@@ -2055,7 +1563,6 @@
     nextStep();
   }
 
-  /* 뷰포트 진입 시 최초 시작, 이후 자동 반복 */
   var started = false;
   new IntersectionObserver(function(entries, obs) {
     if (!entries[0].isIntersecting || started) return;
@@ -2145,38 +1652,26 @@ document.getElementById('inquiryForm').addEventListener('submit', function(e) {
 });
 
 
-/* ── 슬롯 업데이트 시간 (현재시각 - 22분, 한국시간, 1분마다 갱신) ── */
+
+
+/* ── 푸터 드롭다운 ── */
 (function() {
-  var el = document.getElementById('slotUpdated');
-  if (!el) return;
-
-  function render() {
-    var now = new Date();
-    var kst = new Date(now.getTime() + 9 * 60 * 60 * 1000 - 22 * 60 * 1000);
-    var h  = kst.getUTCHours();
-    var m  = kst.getUTCMinutes();
-    var ampm = h < 12 ? '오전' : '오후';
-    h = h % 12 || 12;
-    var mm = m < 10 ? '0' + m : '' + m;
-    el.textContent = '방금 ' + ampm + ' ' + h + ':' + mm + ' 에 업데이트됨';
-  }
-
-  render();
-  /* 매 분 정각에 맞춰 갱신 */
-  var now = new Date();
-  var msToNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
-  setTimeout(function() {
-    render();
-    setInterval(render, 60000);
-  }, msToNextMinute);
+  var toggle = document.getElementById('footerToggle');
+  var body   = document.getElementById('footerBody');
+  if (!toggle || !body) return;
+  toggle.addEventListener('click', function() {
+    var open = body.classList.toggle('open');
+    toggle.classList.toggle('open', open);
+  });
 })();
 
 
 /* ── Nav 스크롤 배경 + 플로팅 버튼 표시 제어 ── */
 (function() {
-  var nav    = document.querySelector('nav');
-  var fab    = document.querySelector('.fab');
-  var hero   = document.querySelector('.hero');
+  var nav     = document.querySelector('nav');
+  var navBtn  = document.querySelector('.nav-btn');
+  var fab     = document.querySelector('.fab');
+  var hero    = document.querySelector('.hero');
   var inquiry = document.getElementById('inquiry');
 
   function update() {
@@ -2190,12 +1685,20 @@ document.getElementById('inquiryForm').addEventListener('submit', function(e) {
     }
 
     /* fab: hero 영역 벗어났고 inquiry 섹션 아직 안 보일 때만 표시 */
-    var heroBottom    = hero    ? hero.getBoundingClientRect().bottom    : 0;
-    var inquiryTop    = inquiry ? inquiry.getBoundingClientRect().top     : Infinity;
+    var heroBottom = hero    ? hero.getBoundingClientRect().bottom : 0;
+    var inquiryTop = inquiry ? inquiry.getBoundingClientRect().top : Infinity;
     var show = heroBottom < 0 && inquiryTop > window.innerHeight;
-    fab.style.opacity         = show ? '1' : '0';
-    fab.style.pointerEvents   = show ? 'auto' : 'none';
-    fab.style.transform       = show ? 'translateY(0)' : 'translateY(12px)';
+
+    fab.style.opacity       = show ? '1' : '0';
+    fab.style.pointerEvents = show ? 'auto' : 'none';
+    fab.style.transform     = show ? 'translateY(0) scale(1)' : 'translateY(16px) scale(0.88)';
+
+    /* fab 보일 때 헤더 버튼: 오른쪽 아래로 빠지며 사라짐 */
+    if (navBtn) {
+      navBtn.style.opacity       = show ? '0' : '1';
+      navBtn.style.pointerEvents = show ? 'none' : 'auto';
+      navBtn.style.transform     = show ? 'translateY(8px) scale(0.88)' : 'translateY(0) scale(1)';
+    }
   }
 
   window.addEventListener('scroll', update, { passive: true });
