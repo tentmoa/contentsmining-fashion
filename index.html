@@ -1429,7 +1429,7 @@
           </div>
           <div class="fg">
             <label>연락처 <span>*</span></label>
-            <input type="tel" placeholder="010 - 0000 - 0000" required>
+            <input type="tel" id="phoneInput" placeholder="010 - 0000 - 0000" required>
           </div>
           <div class="fg">
             <label>이메일 주소 <span>*</span></label>
@@ -1646,7 +1646,7 @@
     { domain:'daangn.com',     label:'🥕', bg:'#FF7E36' },
     { domain:'zigzag.kr',      label:'Z',  bg:'#FF338F' },
     { domain:'29cm.co.kr',     label:'29', bg:'#222' },
-    { domain:'wconcept.co.kr', label:'W',  bg:'#000' },
+    { domain:'wconcept.co.kr', label:'W',  bg:'#000', noFavicon:true },
     { domain:'brandi.co.kr',   label:'B',  bg:'#FF3B77' },
     { domain:'kakaostyle.com', label:'KS', bg:'#FFCD00', color:'#391B1B' },
     { domain:'coupang.com',    label:'CP', bg:'#C5172E' },
@@ -1716,10 +1716,14 @@
       fb.textContent = icon.label;
       el.appendChild(fb);
     }
-    img.onerror = showFallback;
-    var t = setTimeout(showFallback, 2200);
-    img.onload = function() { clearTimeout(t); };
-    img.src = 'https://www.google.com/s2/favicons?domain=' + icon.domain + '&sz=128';
+    if (icon.noFavicon) {
+      showFallback();
+    } else {
+      img.onerror = showFallback;
+      var t = setTimeout(showFallback, 2200);
+      img.onload = function() { clearTimeout(t); };
+      img.src = 'https://www.google.com/s2/favicons?domain=' + icon.domain + '&sz=128';
+    }
 
     el.appendChild(img);
     hero.appendChild(el);
@@ -1869,10 +1873,14 @@
         };
       }
       var fb = showFb(icon, el);
-      img.onerror = fb;
-      var tmr = setTimeout(fb, 2200);
-      img.onload = function() { clearTimeout(tmr); };
-      img.src = 'https://www.google.com/s2/favicons?domain=' + icon.domain + '&sz=128';
+      if (icon.noFavicon) {
+        fb();
+      } else {
+        img.onerror = fb;
+        var tmr = setTimeout(fb, 2200);
+        img.onload = function() { clearTimeout(tmr); };
+        img.src = 'https://www.google.com/s2/favicons?domain=' + icon.domain + '&sz=128';
+      }
       el.appendChild(img);
       sec.appendChild(el);
 
@@ -2059,6 +2067,24 @@
 
 
 /* ── Form Submit → Slack Webhook ── */
+/* ── 전화번호 자동 포맷 xxx-xxxx-xxxx ── */
+(function() {
+  var el = document.getElementById('phoneInput');
+  if (!el) return;
+  el.addEventListener('input', function() {
+    var digits = el.value.replace(/\D/g, '').slice(0, 11);
+    var formatted = '';
+    if (digits.length <= 3) {
+      formatted = digits;
+    } else if (digits.length <= 7) {
+      formatted = digits.slice(0,3) + ' - ' + digits.slice(3);
+    } else {
+      formatted = digits.slice(0,3) + ' - ' + digits.slice(3,7) + ' - ' + digits.slice(7);
+    }
+    el.value = formatted;
+  });
+})();
+
 document.getElementById('inquiryForm').addEventListener('submit', function(e) {
   e.preventDefault();
   var form    = this;
