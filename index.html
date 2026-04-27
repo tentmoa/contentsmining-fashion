@@ -709,18 +709,20 @@
     }
     .phones-wrap::-webkit-scrollbar { display:none; }
     .prob-video {
-      width:100%; height:auto; display:block;
-      border-radius:inherit;
+      width:calc(100% + 8px); height:auto; display:block;
+      margin-left:-4px;
+      border-radius:52px;
     }
     .sol-video {
-      width:100%; height:auto; display:block;
-      border-radius:20px;
+      width:calc(100% + 16px); height:auto; display:block;
+      margin-left:-8px;
+      border-radius:52px;
     }
     .prob-item {
       flex:0 0 64%;
       scroll-snap-align:center;
       overflow:hidden;
-      border-radius:28px;
+      border-radius:52px;
       transition:transform .6s cubic-bezier(.25,.46,.45,.94), opacity .6s ease;
       opacity:0.45;
       transform:scale(0.82) rotateY(20deg);
@@ -835,7 +837,7 @@
     .sol-phones {
       display:grid; grid-template-columns:repeat(4,1fr); gap:20px;
     }
-    .sol-card { display:flex; flex-direction:column; align-items:center; gap:14px; }
+    .sol-card { display:flex; flex-direction:column; align-items:center; gap:14px; overflow:hidden; border-radius:52px; }
     .sol-card .mockup-img { border-radius:20px; aspect-ratio:9/19; object-fit:cover; }
     .sol-pill {
       background:var(--orange); color:#fff;
@@ -1137,7 +1139,7 @@
         flex:0 0 100%;
         transform:none;
         opacity:1;
-        border-radius:20px;
+        border-radius:52px;
       }
       .prob-item.car-active {
         transform:none;
