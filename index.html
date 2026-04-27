@@ -708,6 +708,14 @@
       mask-image:linear-gradient(to right, transparent 0%, black 14%, black 86%, transparent 100%);
     }
     .phones-wrap::-webkit-scrollbar { display:none; }
+    .prob-video {
+      width:100%; height:auto; display:block;
+      border-radius:inherit;
+    }
+    .sol-video {
+      width:100%; height:auto; display:block;
+      border-radius:20px;
+    }
     .prob-item {
       flex:0 0 64%;
       scroll-snap-align:center;
@@ -1271,10 +1279,10 @@
     </div>
 
     <div class="phones-wrap">
-      <div class="prob-item"><img src="assets/section-img/1.png" alt="패션 콘텐츠" loading="lazy" class="prob-img"></div>
-      <div class="prob-item"><img src="assets/section-img/2.png" alt="패션 콘텐츠" loading="lazy" class="prob-img"></div>
-      <div class="prob-item"><img src="assets/section-img/3.png" alt="패션 콘텐츠" loading="lazy" class="prob-img"></div>
-      <div class="prob-item"><img src="assets/section-img/4.png" alt="패션 콘텐츠" loading="lazy" class="prob-img"></div>
+      <div class="prob-item"><video autoplay muted loop playsinline class="prob-video"><source src="assets/Section 2/s2-1.mp4" type="video/mp4"></video></div>
+      <div class="prob-item"><video autoplay muted loop playsinline class="prob-video"><source src="assets/Section 2/s2-2.mp4" type="video/mp4"></video></div>
+      <div class="prob-item"><video autoplay muted loop playsinline class="prob-video"><source src="assets/Section 2/s2-3.mp4" type="video/mp4"></video></div>
+      <div class="prob-item"><video autoplay muted loop playsinline class="prob-video"><source src="assets/Section 2/s2-4.mp4" type="video/mp4"></video></div>
     </div>
     <div class="carousel-dots" id="probDots">
       <span class="cdot active"></span>
@@ -1306,25 +1314,25 @@
       <!-- S1 -->
       <div class="sol-card">
         <div class="sol-pill">배꼽에 어울리는 코디</div>
-        <img src="assets/mockup/5.png" alt="배꼽에 어울리는 코디" loading="lazy" class="mockup-img">
+        <video autoplay muted loop playsinline class="sol-video"><source src="assets/Section 3/s3-1.mp4" type="video/mp4"></video>
       </div>
 
       <!-- S2 -->
       <div class="sol-card">
         <div class="sol-pill">스타일을 살리는 아이템</div>
-        <img src="assets/mockup/6.png" alt="스타일을 살리는 아이템" loading="lazy" class="mockup-img">
+        <video autoplay muted loop playsinline class="sol-video"><source src="assets/Section 3/s3-2.mp4" type="video/mp4"></video>
       </div>
 
       <!-- S3 -->
       <div class="sol-card">
         <div class="sol-pill">얼굴이 작아보이는 코디</div>
-        <img src="assets/mockup/7.png" alt="얼굴이 작아보이는 코디" loading="lazy" class="mockup-img">
+        <video autoplay muted loop playsinline class="sol-video"><source src="assets/Section 3/s3-3.mp4" type="video/mp4"></video>
       </div>
 
       <!-- S4 -->
       <div class="sol-card">
         <div class="sol-pill">단점을 보완해주는 아이템</div>
-        <img src="assets/mockup/8.png" alt="단점을 보완해주는 아이템" loading="lazy" class="mockup-img">
+        <video autoplay muted loop playsinline class="sol-video"><source src="assets/Section 3/s3-4.mp4" type="video/mp4"></video>
       </div>
 
         </div>

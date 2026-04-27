@@ -3,6 +3,7 @@
 *.png
 !assets/mockup/*.png
 !assets/section-img/*.png
-index copy*.html
-index copy 2*.html
+*.mp4
+!assets/Section 2/s2-*.mp4
+!assets/Section 3/s3-*.mp4
 .env
