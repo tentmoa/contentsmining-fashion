@@ -709,20 +709,18 @@
     }
     .phones-wrap::-webkit-scrollbar { display:none; }
     .prob-video {
-      width:calc(100% + 8px); height:auto; display:block;
-      margin-left:-4px;
-      border-radius:52px;
+      width:100%; height:auto; display:block;
+      border-radius:14px;
     }
     .sol-video {
-      width:calc(100% + 16px); height:auto; display:block;
-      margin-left:-8px;
-      border-radius:52px;
+      width:100%; height:auto; display:block;
+      border-radius:14px;
     }
     .prob-item {
       flex:0 0 64%;
       scroll-snap-align:center;
       overflow:hidden;
-      border-radius:52px;
+      border-radius:14px;
       transition:transform .6s cubic-bezier(.25,.46,.45,.94), opacity .6s ease;
       opacity:0.45;
       transform:scale(0.82) rotateY(20deg);
@@ -837,7 +835,7 @@
     .sol-phones {
       display:grid; grid-template-columns:repeat(4,1fr); gap:20px;
     }
-    .sol-card { display:flex; flex-direction:column; align-items:center; gap:14px; overflow:hidden; border-radius:52px; }
+    .sol-card { display:flex; flex-direction:column; align-items:center; gap:14px; overflow:hidden; border-radius:14px; }
     .sol-card .mockup-img { border-radius:20px; aspect-ratio:9/19; object-fit:cover; }
     .sol-pill {
       background:var(--orange); color:#fff;
@@ -854,7 +852,7 @@
     }
     .sol-phone::before {
       content:''; position:absolute; top:12px; left:50%; transform:translateX(-50%);
-      width:44px; height:13px; background:#fff; border-radius:8px; z-index:10;
+      width:44px; height:13px; background:#fff; border-radius:14px; z-index:10;
     }
     .sol-phone-inner {
       width:100%; height:100%; border-radius:26px; overflow:hidden; position:relative;
@@ -1139,7 +1137,7 @@
         flex:0 0 100%;
         transform:none;
         opacity:1;
-        border-radius:52px;
+        border-radius:14px;
       }
       .prob-item.car-active {
         transform:none;
@@ -1281,10 +1279,10 @@
     </div>
 
     <div class="phones-wrap">
-      <div class="prob-item"><video autoplay muted loop playsinline class="prob-video"><source src="assets/Section 2/s2-1.mp4" type="video/mp4"></video></div>
-      <div class="prob-item"><video autoplay muted loop playsinline class="prob-video"><source src="assets/Section 2/s2-2.mp4" type="video/mp4"></video></div>
-      <div class="prob-item"><video autoplay muted loop playsinline class="prob-video"><source src="assets/Section 2/s2-3.mp4" type="video/mp4"></video></div>
-      <div class="prob-item"><video autoplay muted loop playsinline class="prob-video"><source src="assets/Section 2/s2-4.mp4" type="video/mp4"></video></div>
+      <div class="prob-item"><video autoplay muted loop playsinline class="prob-video"><source src="assets/Section 2/CM 패션_Section 2_영상01.mp4" type="video/mp4"></video></div>
+      <div class="prob-item"><video autoplay muted loop playsinline class="prob-video"><source src="assets/Section 2/CM 패션_Section 2_영상02.mp4" type="video/mp4"></video></div>
+      <div class="prob-item"><video autoplay muted loop playsinline class="prob-video"><source src="assets/Section 2/CM 패션_Section 2_영상03.mp4" type="video/mp4"></video></div>
+      <div class="prob-item"><video autoplay muted loop playsinline class="prob-video"><source src="assets/Section 2/CM 패션_Section 2_영상04.mp4" type="video/mp4"></video></div>
     </div>
     <div class="carousel-dots" id="probDots">
       <span class="cdot active"></span>
@@ -1316,25 +1314,25 @@
       <!-- S1 -->
       <div class="sol-card">
         <div class="sol-pill">배꼽에 어울리는 코디</div>
-        <video autoplay muted loop playsinline class="sol-video"><source src="assets/Section 3/s3-1.mp4" type="video/mp4"></video>
+        <video autoplay muted loop playsinline class="sol-video"><source src="assets/Section 3/CM 패션_Section 3_영상01.mp4" type="video/mp4"></video>
       </div>
 
       <!-- S2 -->
       <div class="sol-card">
         <div class="sol-pill">스타일을 살리는 아이템</div>
-        <video autoplay muted loop playsinline class="sol-video"><source src="assets/Section 3/s3-2.mp4" type="video/mp4"></video>
+        <video autoplay muted loop playsinline class="sol-video"><source src="assets/Section 3/CM 패션_Section 3_영상02.mp4"></video>
       </div>
 
       <!-- S3 -->
       <div class="sol-card">
         <div class="sol-pill">얼굴이 작아보이는 코디</div>
-        <video autoplay muted loop playsinline class="sol-video"><source src="assets/Section 3/s3-3.mp4" type="video/mp4"></video>
+        <video autoplay muted loop playsinline class="sol-video"><source src="assets/Section 3/CM 패션_Section 3_영상03.mp4"></video>
       </div>
 
       <!-- S4 -->
       <div class="sol-card">
         <div class="sol-pill">단점을 보완해주는 아이템</div>
-        <video autoplay muted loop playsinline class="sol-video"><source src="assets/Section 3/s3-4.mp4" type="video/mp4"></video>
+        <video autoplay muted loop playsinline class="sol-video"><source src="assets/Section 3/CM 패션_Section 3_영상04.mp4" type="video/mp4"></video>
       </div>
 
         </div>
